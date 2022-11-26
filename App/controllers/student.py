@@ -5,8 +5,8 @@ from App.database import db
 
 # Creates a new student given their name, programme and faculty
 # Commits the student to the database and returns the student
-def create_student(name, programme, faculty):
-    new_student = Student(name=name, programme=programme, faculty=faculty)
+def create_student(firstName, lastName, programme, faculty):
+    new_student = Student(firstName=firstName, lastName=lastName, programme=programme, faculty=faculty)
     db.session.add(new_student)
     db.session.commit()
     return new_student
@@ -46,11 +46,13 @@ def get_all_student_reviews(id):
 
 # Updates a student given their id, name, programme and faculty
 # If name, programme or faculty is None, it is not updated
-def update_student(id, name=None, programme=None, faculty=None):
+def update_student(id, firstName=None, lastName=None, programme=None, faculty=None):
     student = Student.query.get(id)
     if student:
-        if name:
-            student.name = name
+        if firstName:
+            student.firstName = firstName
+        if lastName:
+            student.firstName = lastName
         if programme:
             student.programme = programme
         if faculty:

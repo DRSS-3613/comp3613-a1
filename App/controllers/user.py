@@ -2,17 +2,17 @@ from App.models import User
 from App.database import db
 
 
-# Creates a new user given their username, password and access level
-def create_user(username, password, access=1):
-    new_user = User(username=username, password=password, access=access)
+# Creates a new user given their email, password and access level
+def create_user(email, password, access=1):
+    new_user = User(email=email, password=password, access=access)
     db.session.add(new_user)
     db.session.commit()
     return new_user
 
 
-# Gets a user by their username
-def get_user_by_username(username):
-    return User.query.filter_by(username=username).first()
+# Gets a user by their email
+def get_user_by_email(email):
+    return User.query.filter_by(email=email).first()
 
 
 # Gets a user by their id
@@ -38,11 +38,11 @@ def get_all_users_json():
     return [user.to_json() for user in users]
 
 
-# Updates a user's username given their id and username
-def update_user(id, username):
+# Updates a user's email given their id and email
+def update_user(id, email):
     user = get_user(id)
     if user:
-        user.username = username
+        user.email = email
         db.session.add(user)
         return db.session.commit()
     return None
