@@ -18,16 +18,16 @@ def create_review(staff_id, student_id, sentiment, text):
     return None
 
 
-# # Updates a review given a review id and updated review text
-# # Returns the review object as a json if successful, None otherwise
-# def update_review(id, text):
-#     review = Review.query.get(id)
-#     if review:
-#         review.text = text
-#         db.session.add(review)
-#         db.session.commit()
-#         return review
-#     return None
+# Updates a review given a review id and updated review text
+# Returns the review object as a json if successful, None otherwise
+def update_review(id, text):
+    review = Review.query.get(id)
+    if review:
+        review.text = text
+        db.session.add(review)
+        db.session.commit()
+        return review
+    return None
 
 
 # Deletes a review given a review id
