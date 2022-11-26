@@ -41,7 +41,7 @@ def update_student_action(student_id):
         student = update_student(
             student_id,
             firstName=data["firstName"],
-            lastName=data["lastName"]
+            lastName=data["lastName"],
             programme=data["programme"],
             faculty=data["faculty"],
         )

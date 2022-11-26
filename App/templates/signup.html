@@ -1,0 +1,36 @@
+{% extends "auth.html" %}
+{% block title %}CARD | Sign Up{% endblock %}
+{% block page %}CARD{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <h1>Sign Up</h1>
+    
+<main class="auth">
+    <form class="auth-form text-center" action="signup" method="POST">
+        <div class="input-container">
+
+        <label for="fname" class="auth-label"> First Name </label>
+        <input type="text" class="auth-input" name="fname" required>
+
+        <label for="lname" class="auth-label"> Last Name </label>
+        <input type="text" class="auth-input" name="lname" required>
+
+        <label for="email" class="auth-label"> Email </label>
+        <input type="text" class="auth-input" name="email" required>
+
+        <label for="pass" class="auth-label"> Password </label>
+        <input type="password" class="auth-input" id="pw" name="password" required>
+       
+        </div>
+        <input type="submit" value="SIGNUP" id="signup-btn" class="submit-btn">
+    </form>
+    <span class="center">
+        <div class="nobr sign align-center">
+            Already have an account?  <a href="/login" class="invisible">  Login </a>
+        </div>
+    </span>
+</main>
+{% endblock %}
+{{ super() }}

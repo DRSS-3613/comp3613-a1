@@ -6,9 +6,6 @@ class Vote(db.Model):
     staff_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     review_id = db.Column(db.Integer, db.ForeignKey("review.id"), nullable=False)
     type = db.Column(db.String, nullable=False)
-    # reviews = db.relationship(
-    #     "Review", backref="user", lazy=True, cascade="all, delete-orphan"
-    # )
 
     def __init__(self, staff_id, review_id, type):
         self.staff_id = staff_id

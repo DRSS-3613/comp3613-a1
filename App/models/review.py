@@ -13,38 +13,16 @@ class Review(db.Model):
     timestamp = db.Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     sentiment = db.Column(db.String, db.ForeignKey("sentiment"),nullable=False)
     text = db.Column(db.String(1000), nullable=False)
-    votes = db.Column(MutableDict.as_mutable(JSON), nullable=False)
-
+    # votes = db.Column(MutableDict.as_mutable(JSON), nullable=False)
+    votes = db.relationship("Vote", backref="Review", lazy=True, cascade="all, delete-orphan")
+    
     def __init__(self, staff_id, student_id, sentiment, text):
         self.staff_id = staff_id
         self.student_id = student_id
         self.timestamp = datetime.datetime.utcnow
         self.sentiment = sentiment
         self.text = text
-        self.votes = {"num_upvotes": 0, "num_downvotes": 0}
-
-    def vote(self, user_id, vote):
-        self.votes.update({user_id: vote})
-        self.votes.update(
-            {"num_upvotes": len([vote for vote in self.votes.values() if vote == "up"])}
-        )
-        self.votes.update(
-            {
-                "num_downvotes": len(
-                    [vote for vote in self.votes.values() if vote == "down"]
-                )
-            }
-        )
-
-    def get_num_upvotes(self):
-        return self.votes["num_upvotes"]
-
-    def get_num_downvotes(self):
-        return self.votes["num_downvotes"]
-
-    def get_all_votes(self):
-        return self.votes
-
+    
     def to_json(self):
         return {
             "id": self.id,
@@ -55,3 +33,22 @@ class Review(db.Model):
             "num_upvotes": self.get_num_upvotes(),
             "num_downvotes": self.get_num_downvotes(),
         }
+        
+    def get_upvotes(self):
+        return self.query.filter(self.votes.type == "up") 
+    
+    def get_downvotes(self):
+        return self.query.filter(self.votes.type == "down") 
+    
+    def get_num_upvotes(self):
+        count = 0
+        for v in self.get_upvotes(): count+=1
+        return count
+    
+    def get_num_downvotes(self):
+        count = 0
+        for v in self.get_downvotes(): count+=1
+        return count
+    
+    def get_num_votes(self):
+        return self.get_num_upvotes() + self.get_num_downvotes()

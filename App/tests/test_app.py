@@ -10,7 +10,7 @@ from App.controllers.user import (
     get_all_users,
     get_all_users_json,
     get_user,
-    get_user_by_username,
+    get_user_by_email,
     update_user,
     delete_user,
 )
@@ -261,12 +261,12 @@ class UsersIntegrationTests(unittest.TestCase):
 
     def test_create_admin(self):
         test_admin = create_user("rick", "rickpass", 2)
-        admin = get_user_by_username("rick")
+        admin = get_user_by_email("rick@rickpass")
         assert test_admin.username == admin.username and test_admin.is_admin()
 
     def test_create_user(self):
         test_user = create_user("john", "johnpass", 1)
-        user = get_user_by_username("john")
+        user = get_user_by_email("john@mail.com")
         assert user.username == "john" and not user.is_admin()
 
     def test_get_user(self):

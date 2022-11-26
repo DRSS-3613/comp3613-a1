@@ -6,7 +6,6 @@ ACCESS = {
     "admin": 2,
 }
 
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String, nullable=False)
@@ -14,11 +13,8 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
     access = db.Column(db.Integer, nullable=False)
-    # reviews = db.relationship(
-    #     "Review", backref="user", lazy=True, cascade="all, delete-orphan"
-    # )
 
-    def __init__(self, email, firstName, lastName, password, access=ACCESS["user"]):
+    def __init__(self, email, firstName, lastName, password, access=ACCESS["staff"]):
         self.email = email
         self.firstName = firstName
         self.lastName = lastName
