@@ -1,115 +1,37 @@
 {% extends "layout.html" %}
 {% block title %}CARD | Home{% endblock %}
-{% block page %}CARD{% endblock %}
+{% block page %}Dashboard{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    
 <main class="main-container">
-    <div class="area-1">
+    <div class="wrap">
+        <div class="search">
+            <input type="text" class="search" placeholder="Enter student name or id">
+            <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
+                SEARCH<i class="fa fa-search"></i>
+            </button>
+        </div>
+        </div>
+    <div class="students-area">
         <section class="card-container" >
-        {%for student in students %}
-            <div class="card student-card">
-                <div class="card-content">
-                    <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
-                    <h6>{{student.faculty}}</h6>
-                    <p> {{student.programme}}</p>
-                    <p style="margin-top:20px;">
-                      {% if not book.reviews%}
-                        <p> {{student.get_karma()}} </p>
-                    </p>
-                  <div class="btn-wrapper">
-                    <a class="waves-effect deep-purple accent-1 waves-light btn" id="review-btn" href="{{ url_for('view_reviews', b=book.isbn)}}">
-                  </div>
+            {%if students%}
+            {%for student in students %}
+                <div class="card student-card">
+                    <div class="card-content">
+                        <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
+                        <h6>{{student.faculty}}</h6>
+                        <p> {{student.programme}}</p>
+                        <p style="margin-top:20px;">
+                            <p> karma </p>
+                        </p>
+                    </div>
                 </div>
-            </div>
-<!--             {% endfor %} -->
+            {%endfor%}
+        {%endif%}
         </section>
     </div>
-    <!-- /End of View Books-->
-  
-    <!--   Review Section -->
-    <div class="area-2">
-      <section class="review-container">
-        <h3>
-        {% if selected_book %}
-            {{selected_book["title"]}} </h3>
-        {% else %}
-          Select A Book To Review </h3>
-        {% endif %}
-        <form>
-        <div>
-            <h5> Write a Review Form </h5>
-            <div>
-              <input type="text" name="review-text" rows="3" required/>
-            </div>
-            <div>
-              <p>Rating</p>
-              {% for x in range (1,6): %}
-                <label>
-                  <input type="radio" class="with-gap" name="group1" value="{{x}}" required/>
-                  <span class="ratings">
-                    {% if x>1 %}
-                      {{x}} stars
-                    {% else %}
-                      {{x}} star
-                    {% endif %}
-                  </span>
-                </label>
-              {% endfor %}
-            </div>
-            <div>
-              {% if selected_book %}
-                <input type="submit" class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', b=selected_book.isbn)}}">
-              {% else %}
-                <a class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review">Create Review </a>
-              {% endif %}
-            </div>
-          </form>
-        </div>
-      </section>
-     
-
-    <!-- Reviews List area -->
-      {% if selected_book %}
-        {% if not selected_book.reviews: %}
-          <section class="reviews-list">
-            <h6> No reviews recorded for this book </h6>
-          </section>
-        {% else %}
-          <section class="reviews-list">
-          {% for review in selected_book.reviews: %}
-            <div class="card review-card">
-              <div class="card-content">
-                <h5> {{review.text}} </h5>
-                <h6>Review rating:
-                    {% for i in range (review.rating): %}
-                      <i class="stars material-icons">star</i>
-                    {% endfor %}
-                  {% for i in range (5-review.rating): %}
-                      <i class="stars material-icons">star_border</i>
-                    {% endfor %}                   
-                </h6>
-                <span class="align-right">
-                <a class="waves-effect deep-purple darken-2 waves-light btn" id="delete-review" href="{{url_for('delete_review', b=selected_book.isbn, r=review.id)}}">
-                  Delete
-                  <i class="delete material-icons">delete_sweep</i>
-                </a>
-                </span>
-              </div>
-            </div>
-          {% endfor %}
-          </section>
-        {% endif %}
-      {% endif %}
-    <!-- /Reviews List -->
-   </div>
-      <!-- End of Area 2   -->
-
-        
-  
     </main>
 {% endblock %}
 {{ super() }}
