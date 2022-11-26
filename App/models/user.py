@@ -2,22 +2,26 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
 
 ACCESS = {
-    "user": 1,
+    "staff": 1,
     "admin": 2,
 }
 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False, unique=True)
+    firstName = db.Column(db.String, nullable=False)
+    lastName = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
     access = db.Column(db.Integer, nullable=False)
-    reviews = db.relationship(
-        "Review", backref="user", lazy=True, cascade="all, delete-orphan"
-    )
+    # reviews = db.relationship(
+    #     "Review", backref="user", lazy=True, cascade="all, delete-orphan"
+    # )
 
-    def __init__(self, username, password, access=ACCESS["user"]):
-        self.username = username
+    def __init__(self, email, firstName, lastName, password, access=ACCESS["user"]):
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
         self.set_password(password)
         self.access = access
 
@@ -28,7 +32,7 @@ class User(db.Model):
         return self.access >= access_level
 
     def to_json(self):
-        return {"id": self.id, "username": self.username, "access": self.access}
+        return {"id": self.id, "email": self.email, "access": self.access}
 
     def set_password(self, password):
         """Create hashed password."""
