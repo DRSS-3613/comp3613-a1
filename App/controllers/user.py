@@ -3,8 +3,8 @@ from App.database import db
 
 
 # Creates a new user given their email, password and access level
-def create_user(email, password, access=1):
-    new_user = User(email=email, password=password, access=access)
+def create_user(email, password, firstName, lastName, access=1):
+    new_user = User(email=email, password=password, firstName=firstName, lastName=lastName, access=access)
     db.session.add(new_user)
     db.session.commit()
     return new_user

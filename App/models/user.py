@@ -14,11 +14,11 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     access = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, email, firstName, lastName, password, access=ACCESS["staff"]):
+    def __init__(self, email, password, firstName, lastName, access=ACCESS["staff"]):
         self.email = email
+        self.set_password(password)
         self.firstName = firstName
         self.lastName = lastName
-        self.set_password(password)
         self.access = access
 
     def is_admin(self):

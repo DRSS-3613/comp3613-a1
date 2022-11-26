@@ -11,7 +11,7 @@ class Review(db.Model):
     staff_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
     timestamp = db.Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    sentiment = db.Column(db.String, db.ForeignKey("sentiment"),nullable=False)
+    sentiment = db.Column(db.String, nullable=False)
     text = db.Column(db.String(1000), nullable=False)
     # votes = db.Column(MutableDict.as_mutable(JSON), nullable=False)
     votes = db.relationship("Vote", backref="Review", lazy=True, cascade="all, delete-orphan")

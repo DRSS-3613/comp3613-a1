@@ -32,7 +32,9 @@
       <div class="nav-wrapper">
           <ul class="flashes">
           {% for message in messages %}
-            <li>{{ message }}</li>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{message}}
+          </div>
           {% endfor %}
           </ul>
       </div>

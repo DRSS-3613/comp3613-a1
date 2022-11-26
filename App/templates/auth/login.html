@@ -1,0 +1,33 @@
+{% extends "auth/layout.html" %}
+{% block title %}CARD | Login{% endblock %}
+{% block page %}CARD{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <h1>Login</h1>
+    
+<main class="auth">
+   
+    <form class="auth-form text-center" action="/login" method="POST">
+        <div class="input-container">
+        
+            {% if not data%}
+            {% set data = "" %}
+            {%endif%}
+            <label for="email" class="auth-label"> Email </label>
+            <input type="text" class="auth-input" name="email" value="{{ data.email }}" required>
+
+            <label for="password" class="auth-label"> Password </label>
+            <input type="password" class="auth-input" id="pw" name="password" value="{{ data.password }}" required>
+        </div>
+        <input type="submit" value="LOGIN" id="login-btn" class="submit-btn">
+    </form>
+    <span class="center">
+        <div class="nobr sign align-center">
+            New user?  <a href="/signup" class="invisible">  Sign up </a>
+        </div>
+    </span>
+</main>
+{% endblock %}
+{{ super() }}

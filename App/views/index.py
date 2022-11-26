@@ -11,7 +11,6 @@ def index_page():
 def signup_page():
     return render_template("auth/signup.html")
 
-@index_views.route("/login", methods=["GET"])
-def login_page():
-    return render_template("auth/login.html")
-
+@index_views.route("/dashboard", methods=["GET"])
+def dash_page():
+    return render_template("index.html")
