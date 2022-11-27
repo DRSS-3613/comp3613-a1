@@ -1,12 +1,13 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
+from flask_login import UserMixin
 
 ACCESS = {
     "staff": 1,
     "admin": 2,
 }
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String, nullable=False)
     lastName = db.Column(db.String, nullable=False)
@@ -28,7 +29,7 @@ class User(db.Model):
         return self.access >= access_level
 
     def to_json(self):
-        return {"id": self.id, "email": self.email, "access": self.access}
+        return {"id": self.id, "firstName": self.firstName, "lastName": self.lastName, "email": self.email, "access": self.access}
 
     def set_password(self, password):
         """Create hashed password."""

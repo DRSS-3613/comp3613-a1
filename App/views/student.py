@@ -63,7 +63,7 @@ def get_all_students_action():
 @student_views.route("/dashboard", methods=["GET"])
 def dash_page():
     students = get_all_students()
-    return render_template("index.html", students=students)
+    return render_template("index.html", students=students, current_user=current_identity)
 
 # Gets a student given student id
 @student_views.route("/api/students/<int:student_id>", methods=["GET"])

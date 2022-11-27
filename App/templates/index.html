@@ -20,12 +20,13 @@
             {%for student in students %}
                 <div class="card student-card">
                     <div class="card-content">
-                        <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
+                        <a href="{url_for_}" ><h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
                         <h6>{{student.faculty}}</h6>
                         <p> {{student.programme}}</p>
                         <p style="margin-top:20px;">
                             <p> karma </p>
                         </p>
+                    </a>
                     </div>
                 </div>
             {%endfor%}

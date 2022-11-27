@@ -23,6 +23,12 @@ def add_views(app, views):
     for view in views:
         app.register_blueprint(view)
 
+from App.models import User
+
+login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 def loadConfig(app, config):
     app.config["ENV"] = os.environ.get("ENV", "DEVELOPMENT")
@@ -59,4 +65,5 @@ def create_app(config={}):
     create_db(app)
     setup_jwt(app)
     app.app_context().push()
+    login_manager.init_app(app)
     return app

@@ -18,9 +18,15 @@
         <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left">
-                <li><a href="/dashboard">Home</a></li>
+                <li><a href="/users">Profile</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                {%if user.access==2%}
+                <li><a href="/users">Manage Users</a></li>
+                {%endif%}
+                
                 <li><a href="/users">Users Jinja</a></li>
                 <li><a href="/static/users">Users JS</a></li>
+                
             </ul>
         </div>
       </div>

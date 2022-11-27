@@ -9,7 +9,7 @@ function loadTable(users){
     for(let user of users){
         table.innerHTML += `<tr>
             <td>${user.id}</td>
-            <td>${user.username}</td>
+            <td>${user.email}</td>
         </tr>`;
     }
 }
