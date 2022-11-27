@@ -1,0 +1,38 @@
+{% extends "auth/layout.html" %}
+{% block title %}CARD | Add Student{% endblock %}
+{% block page %}CARD{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <h1>Add Student</h1>
+    
+<main class="auth">
+   
+    <form class="auth-form text-center" action="/add_student" method="POST">
+        <div class="input-container">
+        
+            {% if not data%}
+            {% set data = "" %}
+            {%endif%}
+            <label for="student_id" class="auth-label"> Student ID </label>
+            <input type="text" class="auth-input" name="student_id" value="{{ data.student_id }}" required>
+
+            <label for="name" class="auth-label"> Name </label>
+            <input type="text" class="auth-input" name="name" value="{{ data.name }}" required>
+            
+            <label for="degree" class="auth-label"> Degree </label>
+            <input type="text" class="auth-input" name="degree" value="{{ data.degree }}" required>
+            
+        </div>
+        <input type="submit" value="Add Student" id="add_student-btn" class="submit-btn">
+  #  </form>
+  # <span class="center">
+  #     <div class="nobr sign align-center">
+  #          New user?  <a href="/signup" class="invisible">  Sign up </a>
+  #      </div>
+  # </span>
+</main>
+{% endblock %}
+{{ super() }}
+    
