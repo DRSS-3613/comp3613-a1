@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify, request, send_from_directory, flash, make_response
+from flask import Blueprint, render_template, redirect, url_for, jsonify, request, send_from_directory, flash
 from flask_jwt import jwt_required, current_identity
 from flask_login import login_user, login_required, LoginManager
 
@@ -50,33 +50,35 @@ def signup_action():
         )
         if user:
             return jsonify({"message": f"user {data['email']} created"}), 201
-        return jsonify({"message": "User not created"}), 400
+    return jsonify({"message": "User not created"}), 400
 
 
 # Sign up route
-@user_views.route("/signup", methods=["POST"])
+@user_views.route("/signup", methods=["POST", "GET"])
 def signup_page():
-    data = request.form
-    if get_user_by_email(data["email"]):
-        flash("email taken")
-    else:
-        user = create_user(
-            email=data["email"], password=data["password"], firstName=data["firstName"], lastName=data["lastName"], access=1
-        )   
-        if user:
-            flash("user " + data["email"] + " created")
-            current_identity=user
-            login_user(current_identity)
-            return render_template("dashboard", data=data, user=user)
+    data=None
+    if request.method=="POST":
+        data = request.form
+        if get_user_by_email(data["email"]):
+            flash("email taken")
         else:
-            flash("User not created")
+            user = create_user(
+                email=data["email"], password=data["password"], firstName=data["firstName"], lastName=data["lastName"], access=1
+            )   
+            if user:
+                flash("user " + data["email"] + " created")
+                current_identity=user
+                login_user(current_identity, remember=True)
+                return redirect(url_for('index_views.dashboard_page'))
+            else:
+                flash("User not created")
     return render_template("auth/signup.html", data=data)
 
 
 # Login route
 @user_views.route('/login', methods=['POST', 'GET'])
 def login():
-    data =None
+    data=None
     if request.method == "POST":
         data = request.form
         user = authenticate(data["email"], data["password"])
@@ -85,7 +87,8 @@ def login():
         else:
             login_user(user, remember=True)
             current_identity=user
-            return render_template('index.html', user=current_identity)
+            flash("user login successful")
+            return redirect(url_for('index_views.dashboard_page'))
     return render_template("/auth/login.html", data=data)
 
 

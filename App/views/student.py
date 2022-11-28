@@ -60,10 +60,13 @@ def get_all_students_action():
         return jsonify([student.to_json() for student in students]), 200
     return jsonify({"error": "students not found"}), 404
 
+
+# Dashboard page
 @student_views.route("/dashboard", methods=["GET"])
-def dash_page():
+def dashboard_page():
     students = get_all_students()
-    return render_template("index.html", students=students, current_user=current_identity)
+    return render_template("index.html", students=students, user=current_identity)
+
 
 # Gets a student given student id
 @student_views.route("/api/students/<int:student_id>", methods=["GET"])

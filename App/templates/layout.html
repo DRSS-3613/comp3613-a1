@@ -20,10 +20,11 @@
             <ul id="nav-mobile" class="left">
                 <li><a href="/users">Profile</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
-                {%if user.access==2%}
-                <li><a href="/users">Manage Users</a></li>
+                {% if user%}           
+                  {%if user.access==2%}
+                  <li><a href="/users">Manage Users</a></li>
+                  {%endif%}
                 {%endif%}
-                
                 <li><a href="/users">Users Jinja</a></li>
                 <li><a href="/static/users">Users JS</a></li>
                 
