@@ -6,19 +6,16 @@
 
 {% block content %}
 <main class="main-container">
-    <section>
-    <div class="wrap container">
-        <div class="search">
-            <input type="text" class="search" placeholder="Enter student name or id">
-            <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
-                SEARCH<i class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
-</section>
-<section class="container">
         <!--   View Students Section -->
         <div class="area-1">
+            <div class="search" style="max-width:40vw; padding-top:5px;">
+                <section>
+                <input type="text" class="search" placeholder="Enter student name or id">
+                <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
+                    SEARCH
+                </button>
+            </section>
+            </div>
             <section class="card-container" >
                 {%for student in students%}
                 <div class="card book-card">
@@ -80,7 +77,6 @@
                   </form>
                   </div>
               </section>
-</section>
            
       
           <!-- Reviews List area -->
@@ -161,7 +157,7 @@
     }
   
     .book-card {
-      width: 230px;
+      width: 200px;
       max-height: 250%;
       max-width: 100%;
     }
@@ -177,8 +173,8 @@
       bottom: 10%;
     }
     .area-2 {
-      padding: 0px 3%;
-      max-width:500px;
+      padding: 0px 5%;
+      max-width:400px;
     }
     .review-container{
       margin-bottom: 20%;
