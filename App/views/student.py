@@ -65,7 +65,7 @@ def get_all_students_action():
 @student_views.route("/dashboard", methods=["GET"])
 def dashboard_page():
     students = get_all_students()
-    return render_template("index.html", students=students, user=current_identity)
+    return render_template("index.html", students=students)
 
 
 # Gets a student given student id

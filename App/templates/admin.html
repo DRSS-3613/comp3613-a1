@@ -5,6 +5,230 @@
 {{ super() }}
 
 {% block content %}
-ADMINNNNNNNN manage users
+{% if current_user.is_admin %}
+
+<!-- My Code starts -->
+<main class="main-container">
+    <!--   View Books Section -->
+    <div class="area-1">
+        <section class="card-container" >
+<!--             {% for book in data: %} -->
+            <div class="card book-card">
+                <div class="card-content">
+                    <h5 style="margin-bottom: 20px;">{{users.firstName + "\n" + users.lastName}}</h5>
+                    <p> {{users.faculty}}</p>
+                    <p> {{users.programme}}</p>
+                    <p style="margin-top:20px;">
+                        <p> {{users.get_karma()}}</p>
+                    </p>
+                  <div class="btn-wrapper">
+                    <a class="waves-effect deep-purple accent-1 waves-light btn" id="review-btn" href="{{ url_for('view_student', s=student.id)}}">
+                        <i class="material-icons left"> add_circle_outline </i> Review </a>
+                  </div>
+                </div>
+            </div>
+<!--             {% endfor %} -->
+        </section>
+    </div>
+    <!-- /End of View Books-->
+  
+    <!--   Review Section -->
+    <div class="area-2">
+      <section class="review-container">
+        <h3>
+        {% if selected_user %}
+            {{selected_user["firstName"]}} </h3>
+        {% else %}
+          Select A User </h3>
+        {% endif %}
+        <form>
+        <div>
+            <h5> Write a Review </h5>
+            <div>
+              <input type="text" name="review-text" rows="3" required/>
+            </div>
+            <div>
+              <p>Rating</p>
+              {% for x in range (1,6): %}
+                <label>
+                  <input type="radio" class="with-gap" name="group1" value="{{x}}" required/>
+                  <span class="ratings">
+                    {% if x>1 %}
+                      {{x}} stars
+                    {% else %}
+                      {{x}} star
+                    {% endif %}
+                  </span>
+                </label>
+              {% endfor %}
+            </div>
+            <div>
+              {% if selected_user %}
+                <input type="submit" class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
+              {% else %}
+                <a class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review">Create Review </a>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+      </section>
+     
+
+    <!-- Reviews List area -->
+      {% if selected_student %}
+        {% if not selected_student.reviews: %}
+          <section class="reviews-list">
+            <h6> No reviews recorded for this book </h6>
+          </section>
+        {% else %}
+          <section class="reviews-list">
+          {% for review in selected_student.reviews: %}
+            <div class="card review-card">
+              <div class="card-content">
+                <h5> {{review.text}} </h5>                
+                </h6>
+                <span class="align-right">
+                <a class="waves-effect deep-purple darken-2 waves-light btn" id="delete-review" href="{{url_for('delete_review', b=selected_student.id, r=review.id)}}">
+                  Delete
+                  <i class="delete material-icons">delete_sweep</i>
+                </a>
+                </span>
+              </div>
+            </div>
+          {% endfor %}
+          </section>
+        {% endif %}
+      {% endif %}
+    <!-- /Reviews List -->
+   </div>
+      <!-- End of Area 2   -->
+</main>
+<!-- /End Code -->
+
+
+<!--CSS -->
+<style>
+  html{
+    height:100vh;
+  }
+  .flash{
+    -moz-animation: delay 0s ease-in 3s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 3s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 3s forwards;
+  }
+  @keyframes delay {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+  }
+  @-webkit-keyframes delay {
+    to {
+        width:0;
+        height:0;
+        visibility:hidden;
+    }
+  }
+  .main-container {
+    display:flex;
+    height: 100vh;
+  }
+  
+  .area-1 {
+    overflow-y: scroll;   
+    flex: 1;
+    height: inherit;
+  }
+ 
+  .card-container {
+    overflow-y: visible;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    height: inherit;
+    
+  }
+  .card{
+    margin: 0px 0px 10%x 0px;
+  }
+
+  .book-card {
+    width: 230px;
+    max-height: 250%;
+    max-width: 100%;
+  }
+  
+  .btn {
+    margin-top: 22px;
+    border-radius: 20px;
+  }
+  .btn-wrapper{
+    display: flex;
+    justify-content: flex-start;
+    left: 10%;
+    bottom: 10%;
+  }
+  .area-2 {
+    padding: 0px 3%;
+    max-width:500px;
+  }
+  .review-container{
+    margin-bottom: 20%;
+  }
+
+  .ratings{
+    color: black!important;
+  }
+
+  .reviews-list {
+/*     grid-area: area-3; */
+    width: 100%;
+    overflow-y: scroll;
+    max-height: 50%;
+    padding-top: 5%;
+    flex: 1;
+  }
+
+  input[type=text] {
+    border: 1px solid black !important;
+    box-shadow: 0 1px 0 0 purple!important;
+    padding:2px 8px!important;
+  }
+
+  input[type=submit] {
+    color:white;
+  }
+
+  #create-review{
+    position:relative;
+  }
+  .stars {
+    color: orange!important;
+  }
+
+  .review-card{
+    width:100%;
+    bottom: 10px;
+    border: 1px solid;
+    box-shadow: 0 1px 0 0 purple!important;
+  }
+  .align-right{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .delete{
+    margin-left: 5px;
+    margin-top:-10px;
+    margin-bottom:10px;
+  }
+  </style>
+<!-- /End CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script> M.AutoInit(); </script>
+
+{% endif %}
 {% endblock %}
 {{ super() }}

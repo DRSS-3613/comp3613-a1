@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, send_from_directory, flash
 from flask_jwt import jwt_required, current_identity
-from flask_login import login_user, login_required, LoginManager
+from flask_login import login_user, login_required, LoginManager, current_user
 
 from App.controllers import (
     create_user,
@@ -17,7 +17,7 @@ from App.controllers import (
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
 
 
-@user_views.route("/users", methods=["GET"])
+@user_views.route("/u", methods=["GET"])
 def get_user_page():
     users = get_all_users()
     return render_template("users.html", users=users)
@@ -69,7 +69,7 @@ def signup_page():
                 flash("user " + data["email"] + " created")
                 current_identity=user
                 login_user(current_identity, remember=True)
-                return redirect(url_for('index_views.dashboard_page'))
+                return redirect(url_for('student_views.dashboard_page'))
             else:
                 flash("User not created")
     return render_template("auth/signup.html", data=data)
@@ -88,7 +88,7 @@ def login():
             login_user(user, remember=True)
             current_identity=user
             flash("user login successful")
-            return redirect(url_for('index_views.dashboard_page'))
+            return redirect(url_for('student_views.dashboard_page'))
     return render_template("/auth/login.html", data=data)
 
 
@@ -103,15 +103,15 @@ def get_users_action():
     return jsonify({"message": "Access denied"}), 403
 
 
-# Get all users route
-# Must be an admin to access this route
-@user_views.route("/admin", methods=["GET"])
-@login_required
+# Admin view all users
+@user_views.route("/users", methods=["GET"])
+# @login_required
 def get_users_page():
     users=None
-    if current_identity.is_admin():
+    if current_user.is_admin():
         users = get_all_users_json()
-    return render_template("admin.html", users=users)
+        return render_template("admin.html", users=users, selected_user="")
+    return redirect(url_for("#"))
 
 
 # Get user by id route
