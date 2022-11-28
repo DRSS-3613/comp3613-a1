@@ -102,18 +102,18 @@ def get_users_action():
         return jsonify(users), 200
     return jsonify({"message": "Access denied"}), 403
 
-
+# Manage users
 # Admin view all users
 @user_views.route("/users", methods=["GET"])
-# @login_required
+@login_required
 def get_users_page():
     users=None
     if current_user.is_admin():
-        users = get_all_users_json()
+        users = get_all_users()
         return render_template("admin.html", users=users, selected_user="")
     return redirect(url_for("#"))
 
-
+# TODO
 # Get user by id route
 # Must be an admin to access this route
 @user_views.route("/api/users/<int:user_id>", methods=["GET"])
@@ -127,6 +127,7 @@ def get_user_action(user_id):
     return jsonify({"message": "User not found"}), 404
 
 
+# TODO
 # Delete user route
 # Must be an admin to access this route
 @user_views.route("/api/users/<int:user_id>", methods=["DELETE"])
@@ -140,7 +141,7 @@ def delete_user_action(user_id):
         return jsonify({"message": "User deleted"}), 200
     return jsonify({"message": "User not found"}), 404
 
-
+# TODO
 # Get user by access level route
 # Must be an admin to access this route
 @user_views.route("/api/users/access/<int:access_level>", methods=["GET"])

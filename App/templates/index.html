@@ -12,7 +12,7 @@
                 <section>
                 <input type="text" class="search" placeholder="Enter student name or id">
                 <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
-                    SEARCH
+                    SEARCH <i class="material-icons left"> search </i>
                 </button>
             </section>
             </div>
@@ -21,8 +21,9 @@
                 <div class="card book-card">
                     <div class="card-content">
                         <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
-                        <p> {{student.faculty}}</p>
-                        <p> {{student.programme}}</p>
+                        <p> Student ID: {{student.id}}</p>
+                        <p> Faculty: {{student.faculty}}</p>
+                        <p> Programme: {{student.programme}}</p>
                         <p style="margin-top:10px;">
                             <p> {{student.get_karma()}}</p>
                         </p>
@@ -44,7 +45,7 @@
                   {% if selected_user %}
                       {{selected_user["firstName"]}} </h3>
                   {% else %}
-                  Select A User </h3>
+                  Select a Student </h3>
                   {% endif %}
                   <form>
                   <div>
@@ -52,22 +53,6 @@
                       <div>
                       <input type="text" name="review-text" rows="3" required/>
                       </div>
-                      <div>
-                      <p>Rating</p>
-                      {% for x in range (1,6): %}
-                          <label>
-                          <input type="radio" class="with-gap" name="group1" value="{{x}}" required/>
-                          <span class="ratings">
-                              {% if x>1 %}
-                              {{x}} stars
-                              {% else %}
-                              {{x}} star
-                              {% endif %}
-                          </span>
-                          </label>
-                      {% endfor %}
-                      </div>
-                      <div>
                       {% if selected_user %}
                           <input type="submit" class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
                       {% else %}
@@ -147,23 +132,23 @@
     .card-container {
       overflow-y: visible;
       display: flex;
-      justify-content: space-evenly;
+      justify-content: space-around;
       flex-wrap: wrap;
       height: inherit;
       
     }
     .card{
-      margin: 0px 0px 10%x 0px;
+      margin: 0px 0px 2%x 0px;
     }
   
     .book-card {
-      width: 200px;
-      max-height: 250%;
+      width: 255px;
+      max-height: 200%;
       max-width: 100%;
     }
     
     .btn {
-      margin-top: 22px;
+      margin-top: 20px;
       border-radius: 20px;
     }
     .btn-wrapper{
@@ -173,19 +158,14 @@
       bottom: 10%;
     }
     .area-2 {
-      padding: 0px 5%;
-      max-width:400px;
+      padding: 0px 2%;
+      max-width:25%;
     }
     .review-container{
       margin-bottom: 20%;
     }
   
-    .ratings{
-      color: black!important;
-    }
-  
     .reviews-list {
-  /*     grid-area: area-3; */
       width: 100%;
       overflow-y: scroll;
       max-height: 50%;
@@ -194,20 +174,13 @@
     }
   
     input[type=text] {
-      border: 1px solid black !important;
-      box-shadow: 0 1px 0 0 purple!important;
+      border: 1px solid grey !important;
+      box-shadow: 0 1px 1px 0 red!important;
       padding:2px 8px!important;
-    }
-  
-    input[type=submit] {
-      color:white;
     }
   
     #create-review{
       position:relative;
-    }
-    .stars {
-      color: orange!important;
     }
   
     .review-card{
