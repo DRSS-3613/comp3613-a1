@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}DRAC Conduct Tracker{% endblock %}
+{% block title %}Manage Users{% endblock %}
 {% block page %}CARD{% endblock %}
 
 {{ super() }}
@@ -8,106 +8,42 @@
 
 {% if current_user.is_admin %}
 <main class="main-container">
-        <!--   View Users Section -->
-        <div class="area-1">
-            <div class="search" style="max-width:40vw; padding-top:5px;">
-                <section>
-                <input type="text" class="search" placeholder="Enter User name or id">
-                <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
-                    SEARCH <i class="material-icons left"> search </i>
-                </button>
-            </section>
-            </div>
-            <section class="card-container" >
-                {%for user in users%}
-                <div class="card book-card">
-                    <div class="card-content">
-                        <h5 style="margin-bottom: 20px;">{{user.firstName}} {{user.lastName}}</h5>
-                        <p> {{user.email}}</p>
-                        <p> {{user.programme}}</p>
-                        <p style="margin-top:10px;">
-                        </p>
-                      <div class="btn-wrapper">
-                        <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="{{ url_for('student_views.dashboard_page', s=student.id)}}">
-                            <i class="material-icons left"> add_circle_outline </i> View </a>
-                      </div>
-                    </div>
-                </div>
-                {%endfor%}
-            </section>
+        <!-- View Users Section -->
+        <div class="search" style="max-width:40vw; padding-right:5vw; padding-top:20px;">
+          <form class="search-form text-center" action="/users" method="POST">
+          <input type="text" class="search-input" name="user_id" placeholder="Enter id" value="{{users.id}}">
+            <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
+                SEARCH <i class="material-icons left"> search </i>
+            </button>
+            </form>
         </div>
-        <!-- /End of View Students-->
+        <section class="card-container">
+            {%for user in users%}
+            <div class="card user-card">
+              <div class="card-content">
+                  <h5 style="margin-bottom: 20px;">{{user.firstName}} {{user.lastName}}</h5>
+                  <p> ID: {{user.id}}</p>
+                  <p> Email: {{user.email}}</p>
+                  <p> Access:
+                    {%if user.access==2%}
+                      Admin
+                    {%else%}
+                      Staff
+                      {%endif%}
+                  </p>
+                  <p style="margin-top:10px;">
+                  </p>
+                <div class="btn-wrapper">
+                  <a class="waves-effect red accent-5 waves-dark btn" id="delete-btn" href="/users/{{user.id}}" method="DELETE">
+                    <i class="material-icons left"> delete </i> Delete </a>
+                </div>
+              </div>
+            </div>
+            {%endfor%}
+        </section>
+        </div>
+        <!-- /End of View Users-->
       
-        <!--   Review Section -->
-        <div class="area-2">
-            <section class="review-container">
-                  <h3>
-                  {% if selected_user %}
-                      {{selected_user["firstName"]}} </h3>
-                  {% else %}
-                  Select A User </h3>
-                  {% endif %}
-                  <form>
-                  <div>
-                      <h5> Write a Review </h5>
-                      <div>
-                      <input type="text" name="review-text" rows="3" required/>
-                      </div>
-                      <div>
-                      <p>Rating</p>
-                      {% for x in range (1,6): %}
-                          <label>
-                          <input type="radio" class="with-gap" name="group1" value="{{x}}" required/>
-                          <span class="ratings">
-                              {% if x>1 %}
-                              {{x}} stars
-                              {% else %}
-                              {{x}} star
-                              {% endif %}
-                          </span>
-                          </label>
-                      {% endfor %}
-                      </div>
-                      <div>
-                      {% if selected_user %}
-                          <input type="submit" class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
-                      {% else %}
-                          <a class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review">Create Review </a>
-                      {% endif %}
-                      </div>
-                  </form>
-                  </div>
-              </section>
-           
-      
-          <!-- Reviews List area -->
-            {% if selected_student %}
-              {% if not selected_student.reviews: %}
-                <section class="reviews-list">
-                  <h6> No reviews recorded for this book </h6>
-                </section>
-              {% else %}
-                <section class="reviews-list">
-                {% for review in selected_student.reviews: %}
-                  <div class="card review-card">
-                    <div class="card-content">
-                      <h5> {{review.text}} </h5>                
-                      </h6>
-                      <span class="align-right">
-                      <a class="waves-effect deep-purple darken-2 waves-light btn" id="delete-review" href="{{url_for('delete_review', b=selected_student.id, r=review.id)}}">
-                        Delete
-                        <i class="delete material-icons">delete_sweep</i>
-                      </a>
-                      </span>
-                    </div>
-                  </div>
-                {% endfor %}
-                </section>
-              {% endif %}
-            {% endif %}
-          <!-- /Reviews List -->
-         </div>
-            <!-- End of Area 2   -->
   <!--CSS -->
 <style>
     html{
@@ -137,29 +73,25 @@
     .main-container {
       display:flex;
       height: 100vh;
+      width:75vw;
     }
     
-    .area-1 {
-      overflow-y: scroll;   
-      flex: 1;
-      height: inherit;
-    }
-   
     .card-container {
       overflow-y: visible;
       display: flex;
       justify-content: space-evenly;
       flex-wrap: wrap;
       height: inherit;
+      width:100%;
       
     }
     .card{
       margin: 0px 0px 10%x 0px;
     }
   
-    .book-card {
+    .user-card {
       width: 200px;
-      max-height: 250%;
+      max-height: 50vh;
       max-width: 100%;
     }
     
@@ -173,30 +105,10 @@
       left: 10%;
       bottom: 10%;
     }
-    .area-2 {
-      padding: 0px 5%;
-      max-width:400px;
-    }
-    .review-container{
-      margin-bottom: 20%;
-    }
-  
-    .ratings{
-      color: black!important;
-    }
-  
-    .reviews-list {
-  /*     grid-area: area-3; */
-      width: 100%;
-      overflow-y: scroll;
-      max-height: 50%;
-      padding-top: 5%;
-      flex: 1;
-    }
-  
+
     input[type=text] {
-      border: 1px solid black !important;
-      box-shadow: 0 1px 0 0 purple!important;
+      border: 1px solid grey !important;
+      box-shadow: 0 1px 0 0 red!important;
       padding:2px 8px!important;
     }
   
@@ -204,19 +116,6 @@
       color:white;
     }
   
-    #create-review{
-      position:relative;
-    }
-    .stars {
-      color: orange!important;
-    }
-  
-    .review-card{
-      width:100%;
-      bottom: 10px;
-      border: 1px solid;
-      box-shadow: 0 1px 0 0 purple!important;
-    }
     .align-right{
       display: flex;
       justify-content: flex-end;
@@ -228,8 +127,6 @@
     }
     </style>
   <!-- /End CSS -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-      <script> M.AutoInit(); </script>
 
 </main>
 

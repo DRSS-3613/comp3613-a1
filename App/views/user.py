@@ -17,10 +17,10 @@ from App.controllers import (
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
 
 
-@user_views.route("/u", methods=["GET"])
-def get_user_page():
-    users = get_all_users()
-    return render_template("users.html", users=users)
+# @user_views.route("/u", methods=["GET"])
+# def get_user_page():
+#     users = get_all_users()
+#     return render_template("users.html", users=users)
 
 
 @user_views.route("/static/users", methods=["GET"])
@@ -53,7 +53,7 @@ def signup_action():
     return jsonify({"message": "User not created"}), 400
 
 
-# Sign up route
+# Sign up page
 @user_views.route("/signup", methods=["POST", "GET"])
 def signup_page():
     data=None
@@ -75,7 +75,7 @@ def signup_page():
     return render_template("auth/signup.html", data=data)
 
 
-# Login route
+# Login page
 @user_views.route('/login', methods=['POST', 'GET'])
 def login():
     data=None
@@ -102,8 +102,8 @@ def get_users_action():
         return jsonify(users), 200
     return jsonify({"message": "Access denied"}), 403
 
-# Manage users
-# Admin view all users
+# Manage staff page
+# Admin view all staff
 @user_views.route("/users", methods=["GET"])
 @login_required
 def get_users_page():
@@ -127,6 +127,21 @@ def get_user_action(user_id):
     return jsonify({"message": "User not found"}), 404
 
 
+# Get user by id page
+@user_views.route("/users", methods=["POST"])
+@login_required
+def get_user_page():
+    users=[]
+    if request.method == "POST":
+        data = request.form
+        user_id=data["user_id"]
+        if current_user.is_admin():
+            user = get_user(user_id)
+        if user:
+            users.append(user)
+    return render_template("admin.html", users=users)
+
+
 # Delete user route
 # Must be an admin to access this route
 @user_views.route("/api/users/<int:user_id>", methods=["DELETE"])
@@ -140,7 +155,21 @@ def delete_user_action(user_id):
         return jsonify({"message": "User deleted"}), 200
     return jsonify({"message": "User not found"}), 404
 
-# TODO
+
+# Delete user page
+# Must be an admin to access this route
+@user_views.route("/users/<int:user_id>", methods=["GET"])
+@login_required
+def delete_user_page(user_id):
+    if current_user.is_admin():
+        user = get_user(user_id)
+        if user:
+            delete_user(user_id)
+            users=get_all_users()
+            return render_template("admin.html", users=users, selected_user=user)
+    return jsonify({"message": "User not found"}), 404
+
+
 # Get user by access level route
 # Must be an admin to access this route
 @user_views.route("/api/users/access/<int:access_level>", methods=["GET"])
