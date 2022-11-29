@@ -28,7 +28,7 @@
                             <p> {{student.get_karma()}}</p>
                         </p>
                       <div class="btn-wrapper">
-                        <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="{{ url_for('student_views.dashboard_page', s=student.id)}}">
+                        <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="{{ url_for('student_views.get_student_page', student_id=student.id)}}">
                             <i class="material-icons left"> add_circle_outline </i> Review </a>
                       </div>
                     </div>
@@ -42,8 +42,8 @@
         <div class="area-2">
             <section class="review-container">
                   <h3>
-                  {% if selected_user %}
-                      {{selected_user["firstName"]}} </h3>
+                  {% if selected_student %}
+                      {{selected_student["firstName"]}} </h3>
                   {% else %}
                   Select a Student </h3>
                   {% endif %}
@@ -54,7 +54,7 @@
                       <input type="text" name="review-text" rows="3" required/>
                       </div>
                       {% if selected_user %}
-                          <input type="submit" class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
+                          <input type="submit" class="right waves-effect red lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
                       {% else %}
                           <a class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review">Create Review </a>
                       {% endif %}

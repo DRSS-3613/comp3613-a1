@@ -1,4 +1,4 @@
-from App.models import Review, Student, User
+from App.models import Review, Student, User, Vote
 from App.database import db
 
 
@@ -20,10 +20,11 @@ def create_review(staff_id, student_id, sentiment, text):
 
 # Updates a review given a review id and updated review text
 # Returns the review object as a json if successful, None otherwise
-def update_review(id, text):
+def update_review(id, sentiment, text):
     review = Review.query.get(id)
     if review:
         review.text = text
+        review.sentiment = sentiment
         db.session.add(review)
         db.session.commit()
         return review
@@ -75,32 +76,19 @@ def get_reviews_by_student(student_id):
 
 
 # Returns the reviews posted by a user given the user id
-def get_reviews_by_user(user_id):
-    reviews = Review.query.filter_by(user_id=user_id).all()
+def get_reviews_by_user(staff_id):
+    reviews = Review.query.filter_by(staff_id=staff_id).all()
     return reviews
 
 
-# Upvotes a post given a review id and user id
+# Upvotes/Downvotes a post given a review id and user id
 # Returns the review object if successful, None otherwise
-def upvote_review(review_id, user_id):
+def vote_review(review_id, user_id, type):
     review = Review.query.get(review_id)
     user = User.query.get(user_id)
     if review and user:
-        review.vote(user_id, "up")
-        db.session.add(review)
-        db.session.commit()
-        return review
-    return None
-
-
-# Downvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def downvote_review(review_id, user_id):
-    review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "down")
-        db.session.add(review)
+        vote = Vote(staff_id=user_id, review_id=review_id,type=type)
+        db.session.add(vote)
         db.session.commit()
         return review
     return None
@@ -111,12 +99,4 @@ def get_review_votes(id):
     review = Review.query.get(id)
     if review:
         return review.get_votes()
-    return None
-
-
-# Gets a review's karma given the review id
-def get_review_karma(id):
-    review = Review.query.get(id)
-    if review:
-        return review.get_karma()
     return None

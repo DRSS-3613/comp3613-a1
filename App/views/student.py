@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request,redirect, url_for, render_template
 from flask_jwt import jwt_required, current_identity
+from flask_login import login_required
 
 from App.controllers import (
     create_student,
@@ -13,7 +14,6 @@ from App.controllers import (
 
 
 student_views = Blueprint("student_views", __name__, template_folder="../templates")
-
 
 # Create student given name, programme and faculty
 # Must be an admin to access this route
@@ -53,7 +53,7 @@ def update_student_action(student_id):
 
 # Lists all students
 @student_views.route("/api/students", methods=["GET"])
-# @jwt_required()
+@jwt_required()
 def get_all_students_action():
     students = get_all_students()
     if students:
@@ -63,9 +63,10 @@ def get_all_students_action():
 
 # Dashboard page
 @student_views.route("/dashboard", methods=["GET"])
+@login_required
 def dashboard_page():
-    students = get_all_students()
-    return render_template("index.html", students=students)
+    all_students = get_all_students()
+    return render_template("index.html", students=all_students,selected_student="")
 
 
 # Gets a student given student id
@@ -76,6 +77,17 @@ def get_student_action(student_id):
     if student:
         return jsonify(student.to_json()), 200
     return jsonify({"error": "student not found"}), 404
+
+# View
+# Gets a student given student id
+@student_views.route("/students/<int:student_id>", methods=["GET"])
+@login_required
+def get_student_page(student_id):
+    student = get_student(student_id)
+    all_students = get_all_students()
+    if student:
+        return render_template("index.html", students=all_students, selected_student=student)
+    return render_template("index.html", students=all_students,selected_student="")
 
 
 # Gets a student given their name

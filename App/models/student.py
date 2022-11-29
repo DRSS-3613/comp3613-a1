@@ -17,13 +17,15 @@ class Student(db.Model):
 # (total ups if positive + downs if negative) / total votes
     def get_karma(self):
         total_positivity = 0
-        total_votes=1
+        total_votes=0
         for review in self.reviews:
             if review.sentiment=="positive":
                 total_positivity += review.get_num_upvotes()
             if review.sentiment=="negative":
                 total_positivity+=review.get_num_downvotes()
-            total_votes = review.get_num_votes()
+            total_votes += review.get_num_votes()
+        if not total_votes:
+            return total_votes
         return (total_positivity/total_votes) * 100
 
 

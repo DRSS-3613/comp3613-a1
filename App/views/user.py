@@ -113,7 +113,7 @@ def get_users_page():
         return render_template("admin.html", users=users, selected_user="")
     return redirect(url_for("#"))
 
-# TODO
+
 # Get user by id route
 # Must be an admin to access this route
 @user_views.route("/api/users/<int:user_id>", methods=["GET"])
@@ -127,7 +127,6 @@ def get_user_action(user_id):
     return jsonify({"message": "User not found"}), 404
 
 
-# TODO
 # Delete user route
 # Must be an admin to access this route
 @user_views.route("/api/users/<int:user_id>", methods=["DELETE"])
