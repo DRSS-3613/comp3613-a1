@@ -33,19 +33,29 @@ class Review(db.Model):
             "num_upvotes": self.get_num_upvotes(),
             "num_downvotes": self.get_num_downvotes(),
         }
+        
+    def get_all_votes_json(self):
+        return {
+            "num_upvotes": self.get_num_upvotes(),
+            "num_downvotes": self.get_num_downvotes(),
+        }
+        # votes=[]
+        # for v in self.votes:
+        #     votes.append(v.to_json())
+        # return votes
     
     def get_upvotes(self):
-        upvotes=None
+        upvotes=[]
         for vote in self.votes:
             if vote.type=="up":
-                upvotes+=vote
+                upvotes.append(vote)
         return upvotes
     
     def get_downvotes(self):
-        downvotes=None
+        downvotes=[]
         for vote in self.votes:
             if vote.type=="down":
-                downvotes+=vote
+                downvotes.append(vote)
         return downvotes
     
     def get_num_upvotes(self):

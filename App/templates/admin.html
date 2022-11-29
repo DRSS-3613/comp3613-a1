@@ -26,7 +26,6 @@
                         <p> {{user.email}}</p>
                         <p> {{user.programme}}</p>
                         <p style="margin-top:10px;">
-                            <p> {{user.get_karma()}}</p>
                         </p>
                       <div class="btn-wrapper">
                         <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="{{ url_for('student_views.dashboard_page', s=student.id)}}">

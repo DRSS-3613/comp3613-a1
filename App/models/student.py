@@ -1,4 +1,5 @@
 from App.database import db
+import math 
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,7 +27,7 @@ class Student(db.Model):
             total_votes += review.get_num_votes()
         if not total_votes:
             return total_votes
-        return (total_positivity/total_votes) * 100
+        return math.ceil((total_positivity/total_votes) * 100)
 
 
     def to_json(self):

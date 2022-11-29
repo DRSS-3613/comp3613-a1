@@ -5,6 +5,7 @@ from App.controllers import (
     create_review,
     get_review,
     get_all_reviews,
+    vote_review,
     update_review,
     delete_review,
 )
@@ -43,24 +44,13 @@ def get_review_action(review_id):
     return jsonify({"error": "review not found"}), 404
 
 
-# Upvotes post given post id and user id
-@review_views.route("/api/reviews/<int:review_id>/upvote", methods=["PUT"])
+# Upvotes/Downvotes post given post id and user id
+@review_views.route("/api/reviews/<int:review_id>/<vote_type>", methods=["PUT"])
 @jwt_required()
-def upvote_review_action(review_id):
+def vote_review_action(review_id, vote_type):
     review = get_review(review_id)
     if review:
-        review.vote(current_identity.id, "up")
-        return jsonify(review.to_json()), 200
-    return jsonify({"error": "review not found"}), 404
-
-
-# Downvotes post given post id and user id
-@review_views.route("/api/reviews/<int:review_id>/downvote", methods=["PUT"])
-@jwt_required()
-def downvote_review_action(review_id):
-    review = get_review(review_id)
-    if review:
-        review.vote(current_identity.id, "down")
+        review = vote_review(review_id, current_identity.id, vote_type)
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
@@ -102,5 +92,5 @@ def delete_review_action(review_id):
 def get_review_votes_action(review_id):
     review = get_review(review_id)
     if review:
-        return jsonify(review.get_all_votes()), 200
+        return jsonify(review.get_all_votes_json()), 200
     return jsonify({"error": "review not found"}), 404

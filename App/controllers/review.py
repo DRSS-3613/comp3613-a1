@@ -88,7 +88,8 @@ def vote_review(review_id, user_id, type):
     user = User.query.get(user_id)
     if review and user:
         vote = Vote(staff_id=user_id, review_id=review_id,type=type)
-        db.session.add(vote)
+        review.votes.append(vote)
+        db.session.add(review)
         db.session.commit()
         return review
     return None

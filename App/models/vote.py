@@ -11,3 +11,11 @@ class Vote(db.Model):
         self.staff_id = staff_id
         self.review_id = review_id
         self.type = type
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "staff_id": self.staff_id,
+            "review_id": self.review_id,
+            "type": self.type,
+        }
