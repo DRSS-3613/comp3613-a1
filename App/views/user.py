@@ -129,7 +129,7 @@ def get_user_action(user_id):
     return jsonify({"message": "User not found"}), 404
 
 
-# Get user by id page
+# Get user by id page -- search
 @user_views.route("/users", methods=["POST"])
 @login_required
 def get_user_page():

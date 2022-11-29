@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}CARD | Home{% endblock %}
+{% block title %}Search{% endblock %}
 {% block page %}Dashboard{% endblock %}
 
 {{ super() }}
@@ -8,17 +8,17 @@
 <main class="main-container">
         <!--   View Students Section -->
         <div class="area-1">
-            <div class="search" style="max-width:40vw; padding-top:5px;">
-                <section>
-                <input type="text" class="search" placeholder="Enter student name or id">
-                <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
+            <div class="search" style="max-width:40vw; padding-top:20px;">
+              <form class="search-form text-center" action="/dashboard" method="POST">
+              <input type="text" class="search-input" name="keyword" placeholder="Enter student name or id">
+                <button type="submit" style="margin:10px 0 10px 0" class="red search-btn waves-effect waves-dark btn btn-small">
                     SEARCH <i class="material-icons left"> search </i>
                 </button>
-            </section>
+              </form>
             </div>
             <section class="card-container" >
                 {%for student in students%}
-                <div class="card book-card">
+                <div class="card student-card">
                     <div class="card-content">
                         <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
                         <p> Student ID: {{student.id}}</p>
@@ -28,8 +28,8 @@
                             <p> {{student.get_karma()}}</p>
                         </h5>
                       <div class="btn-wrapper">
-                        <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="{{ url_for('student_views.get_student_page', student_id=student.id)}}">
-                            <i class="material-icons left"> add_circle_outline </i> Review </a>
+                        <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="/students/{{student.id}}">
+                            <i class="material-icons left"> library_add </i> Review </a>
                       </div>
                     </div>
                 </div>
@@ -38,89 +38,17 @@
         </div>
         <!-- /End of View Students-->
       
-        <!--   Review Section -->
-        <div class="area-2">
-            <section class="review-container">
-                  <h4>
-                  {% if selected_student %}
-                      {{selected_student["firstName"]}} </h3>
-                  {% else %}
-                  Select a Student </h4>
-                  {% endif %}
-                  <form>
-                  <div>
-                      <h5> Write a Review </h5>
-                      <div>
-                      <input type="text" name="review-text" rows="3" required/>
-                      </div>
-                      {% if selected_user %}
-                          <input type="submit" class="right waves-effect red lighten-1 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
-                      {% else %}
-                          <a class="right waves-effect deep-purple lighten-1 waves-light btn" id="create-review">Create Review </a>
-                      {% endif %}
-                      </div>
-                  </form>
-                  </div>
-              </section>
-           
-      
-          <!-- Reviews List area -->
-            {% if selected_student %}
-              {% if not selected_student.reviews: %}
-                <section class="reviews-list">
-                  <h6> No reviews recorded for this book </h6>
-                </section>
-              {% else %}
-                <section class="reviews-list">
-                {% for review in selected_student.reviews: %}
-                  <div class="card review-card">
-                    <div class="card-content">
-                      <h5> {{review.text}} </h5>                
-                      </h6>
-                      <span class="align-right">
-                      <a class="waves-effect deep-purple darken-2 waves-light btn" id="delete-review" href="{{url_for('delete_review', b=selected_student.id, r=review.id)}}">
-                        Delete
-                        <i class="delete material-icons">delete_sweep</i>
-                      </a>
-                      </span>
-                    </div>
-                  </div>
-                {% endfor %}
-                </section>
-              {% endif %}
-            {% endif %}
-          <!-- /Reviews List -->
-         </div>
-            <!-- End of Area 2   -->
+       
   <!--CSS -->
 <style>
     html{
       height:100vh;
     }
-    .flash{
-      -moz-animation: delay 0s ease-in 3s forwards;
-      /* Firefox */
-      -webkit-animation: cssAnimation 0s ease-in 3s forwards;
-      /* Safari and Chrome */
-      -o-animation: cssAnimation 0s ease-in 3s forwards;
-    }
-    @keyframes delay {
-      to {
-          width:0;
-          height:0;
-          overflow:hidden;
-      }
-    }
-    @-webkit-keyframes delay {
-      to {
-          width:0;
-          height:0;
-          visibility:hidden;
-      }
-    }
+  
     .main-container {
       display:flex;
       height: 100vh;
+      width:55vw;
     }
     
     .area-1 {
@@ -135,20 +63,20 @@
       justify-content: space-around;
       flex-wrap: wrap;
       height: inherit;
-      
     }
+
     .card{
-      margin: 0px 0px 2%x 0px;
+      margin: 0px 0px 10%x 0px;
     }
   
-    .book-card {
-      width: 255px;
-      max-height: 200%;
+    .student-card {
+      width: 240px;
+      max-height: 40%;
       max-width: 100%;
     }
     
     .btn {
-      margin-top: 20px;
+      margin-top: 10px;
       border-radius: 20px;
     }
     .btn-wrapper{

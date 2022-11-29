@@ -11,7 +11,7 @@
         <!-- View Users Section -->
         <div class="search" style="max-width:40vw; padding-right:5vw; padding-top:20px;">
           <form class="search-form text-center" action="/users" method="POST">
-          <input type="text" class="search-input" name="user_id" placeholder="Enter id" value="{{users.id}}">
+          <input type="text" class="search-input" name="user_id" placeholder="Enter id">
             <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
                 SEARCH <i class="material-icons left"> search </i>
             </button>
@@ -52,27 +52,7 @@
     html{
       height:100vh;
     }
-    .flash{
-      -moz-animation: delay 0s ease-in 3s forwards;
-      /* Firefox */
-      -webkit-animation: cssAnimation 0s ease-in 3s forwards;
-      /* Safari and Chrome */
-      -o-animation: cssAnimation 0s ease-in 3s forwards;
-    }
-    @keyframes delay {
-      to {
-          width:0;
-          height:0;
-          overflow:hidden;
-      }
-    }
-    @-webkit-keyframes delay {
-      to {
-          width:0;
-          height:0;
-          visibility:hidden;
-      }
-    }
+    
     .main-container {
       display:flex;
       height: 100vh;
@@ -88,6 +68,7 @@
       width:100%;
       
     }
+
     .card{
       margin: 0px 0px 10%x 0px;
     }
@@ -99,7 +80,7 @@
     }
     
     .btn {
-      margin-top: 22px;
+      margin-top: 20px;
       border-radius: 20px;
     }
     .btn-wrapper{

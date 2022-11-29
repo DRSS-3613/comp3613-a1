@@ -89,6 +89,30 @@ def dashboard_page():
     return render_template("index.html", students=all_students,selected_student="")
 
 
+# View student and reviews page --> search
+@student_views.route("/dashboard", methods=["POST"])
+@login_required
+def search_student_page():
+    data=request.form
+    keyword=data["keyword"]
+    students=[]
+    student=None
+    # Search by id
+    try:
+        int(keyword)
+        student_id = int(keyword)
+        student = get_student(student_id)
+        if student:
+            students.append(student)
+        return render_template("index.html", students=students, selected_student="")
+    except ValueError:
+        # search by name
+        name = data["keyword"]
+        students=[]
+        
+        return render_template("index.html", students=students, selected_student="")
+
+
 # Gets a student given student id
 @student_views.route("/api/students/<int:student_id>", methods=["GET"])
 @jwt_required()
@@ -97,17 +121,6 @@ def get_student_action(student_id):
     if student:
         return jsonify(student.to_json()), 200
     return jsonify({"error": "student not found"}), 404
-
-# View
-# Gets a student given student id
-@student_views.route("/students/<int:student_id>", methods=["GET"])
-@login_required
-def get_student_page(student_id):
-    student = get_student(student_id)
-    all_students = get_all_students()
-    if student:
-        return render_template("index.html", students=all_students, selected_student=student)
-    return render_template("index.html", students=all_students,selected_student="")
 
 
 # Gets a student given their name
@@ -139,3 +152,12 @@ def delete_student_action(student_id):
 def get_all_student_reviews_action(student_id):
     reviews = get_all_student_reviews(student_id)
     return jsonify(reviews), 200
+
+# Lists all reviews for a given student.
+@student_views.route("/students/<int:student_id>/reviews", methods=["GET"])
+@login_required
+def get_all_student_reviews_page(student_id):
+    reviews = get_all_student_reviews(student_id)
+    all_students = get_all_students()
+    student = get_student(student_id)
+    return render_template("index.html", students=all_students, selected_student=student)
