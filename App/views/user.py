@@ -17,7 +17,7 @@ from App.controllers import (
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
 
 
-# @user_views.route("/u", methods=["GET"])
+# @user_views.route("/users", methods=["GET"])
 # def get_user_page():
 #     users = get_all_users()
 #     return render_template("users.html", users=users)
@@ -102,6 +102,8 @@ def get_users_action():
         return jsonify(users), 200
     return jsonify({"message": "Access denied"}), 403
 
+
+
 # Manage staff page
 # Admin view all staff
 @user_views.route("/users", methods=["GET"])
@@ -110,7 +112,7 @@ def get_users_page():
     users=None
     if current_user.is_admin():
         users = get_all_users()
-        return render_template("admin.html", users=users, selected_user="")
+        return render_template("admin-users.html", users=users, selected_user="")
     return redirect(url_for("#"))
 
 
@@ -139,7 +141,7 @@ def get_user_page():
             user = get_user(user_id)
         if user:
             users.append(user)
-    return render_template("admin.html", users=users)
+    return render_template("admin-users.html", users=users)
 
 
 # Delete user route
@@ -166,7 +168,7 @@ def delete_user_page(user_id):
         if user:
             delete_user(user_id)
             users=get_all_users()
-            return render_template("admin.html", users=users, selected_user=user)
+            return render_template("admin-users.html", users=users, selected_user=user)
     return jsonify({"message": "User not found"}), 404
 
 

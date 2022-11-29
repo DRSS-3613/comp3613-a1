@@ -47,7 +47,9 @@ def create_student_page():
                 flash("student created successfully")
             else:
                 flash("student not created")
-    return render_template("add-student.html", student=student, data=data)
+        return render_template("add-student.html", student=student, data=data)
+    if request.method=="GET":
+        return render_template("add-student.html", student=student, data=data)
 
 # Updates student given student id, name, programme and faculty
 # Must be an admin to access this route

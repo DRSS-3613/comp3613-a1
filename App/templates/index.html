@@ -24,9 +24,9 @@
                         <p> Student ID: {{student.id}}</p>
                         <p> Faculty: {{student.faculty}}</p>
                         <p> Programme: {{student.programme}}</p>
-                        <p style="margin-top:10px;">
+                        <h5 style="margin-top:10px;">
                             <p> {{student.get_karma()}}</p>
-                        </p>
+                        </h5>
                       <div class="btn-wrapper">
                         <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="{{ url_for('student_views.get_student_page', student_id=student.id)}}">
                             <i class="material-icons left"> add_circle_outline </i> Review </a>
@@ -41,11 +41,11 @@
         <!--   Review Section -->
         <div class="area-2">
             <section class="review-container">
-                  <h3>
+                  <h4>
                   {% if selected_student %}
                       {{selected_student["firstName"]}} </h3>
                   {% else %}
-                  Select a Student </h3>
+                  Select a Student </h4>
                   {% endif %}
                   <form>
                   <div>
