@@ -21,7 +21,10 @@
             {%for user in users%}
             <div class="card user-card">
               <div class="card-content">
-                  <h5 style="margin-bottom: 20px;">{{user.firstName}} {{user.lastName}}</h5>
+                <h5 style="margin-bottom: 20px;">{{user.firstName}} {{user.lastName}}</h5>
+                {%if user==current_user%}
+                  <h6 class="red-text"> (YOU) </h6>
+                {%endif%}
                   <p> ID: {{user.id}}</p>
                   <p> Email: {{user.email}}</p>
                   <p> Access:
