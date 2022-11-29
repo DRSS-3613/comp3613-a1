@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify, request,redirect, url_for, render_template
+from flask import Blueprint, jsonify, request,redirect, url_for, render_template, flash
 from flask_jwt import jwt_required, current_identity
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from App.controllers import (
     create_student,
@@ -30,6 +30,24 @@ def create_student_action():
         return jsonify({"error": "student not created"}), 400
     return jsonify({"error": "unauthorized"}), 401
 
+# Add student page
+# Must be an admin to access this route
+@student_views.route("/students", methods=["POST", "GET"])
+@login_required
+def create_student_page():
+    student=None
+    data=None
+    if request.method== "POST":
+        if current_user.is_admin():
+            data = request.form
+            student = create_student(
+                firstName=data["firstName"], lastName=data["lastName"], programme=data["programme"], faculty=data["faculty"]
+            )
+            if student:
+                flash("student created successfully")
+            else:
+                flash("student not created")
+    return render_template("add-student.html", student=student, data=data)
 
 # Updates student given student id, name, programme and faculty
 # Must be an admin to access this route

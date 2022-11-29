@@ -1,4 +1,4 @@
-{% extends "auth/layout.html" %}
+{% extends "layout.html" %}
 {% block title %}CARD | Add Student{% endblock %}
 {% block page %}CARD{% endblock %}
 
@@ -9,15 +9,12 @@
     
 <main class="auth">
    
-    <form class="auth-form text-center" action="/add_student" method="POST">
+    <form class="add-student-form text-center" action="/students" method="POST">
         <div class="input-container">
         
             {% if not data%}
             {% set data = "" %}
             {%endif%}
-            <label for="student_id" class="auth-label"> Student ID </label>
-            <input type="text" class="auth-input" name="student_id" value="{{ data.student_id }}" required>
-
             <label for="firstName" class="auth-label"> First Name </label>
             <input type="text" class="auth-input" name="firstName" value="{{ data.firstName }}" required>
             
@@ -27,11 +24,11 @@
             <label for="faculty" class="auth-label"> Faculty </label>
             <input type="text" class="auth-input" name="faculty" value="{{ data.faculty }}" required>
             
-            <label for="programme" class="auth-label"> Degree </label>
+            <label for="programme" class="auth-label"> Programme </label>
             <input type="text" class="auth-input" name="programme" value="{{ data.programme }}" required>
             
         </div>
-        <input type="submit" value="Add Student" id="add_student-btn" class="submit-btn">
+        <input type="submit" value="Add Student" id="add_student-btn" class="submit-btn btn red btn-large">
  
 </main>
 {% endblock %}
