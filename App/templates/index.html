@@ -78,13 +78,10 @@
               <h5> {{review.text}} </h5> 
                 {%for user in users%}
                   {%if user.id == review.staff_id %}
-                    {%set temp = true%}
-                    <p> <em> Written by {{user.firstName}}{{user.lastName}} on {{review.timestamp}} </em></p> 
+                    <p> <em> Written by {{user.firstName}}  {{user.lastName}} on {{review.timestamp}} </em></p> 
                   {%endif%}
-                  {%endfor%} 
-                  {%if temp != true %}
-                    <p> <em> Written by deleted user on {{review.timestamp}} </em></p> 
-                    {%endif%} 
+                {%endfor%} 
+                
               <span style="padding-right: 20px;">
               <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="/student/{{selected_student.id}}/reviews">
                 {{review.get_num_upvotes()}}
