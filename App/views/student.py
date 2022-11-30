@@ -7,6 +7,7 @@ from App.controllers import (
     get_student,
     get_all_students,
     get_students_by_name,
+    get_all_users,
     get_all_student_reviews,
     update_student,
     delete_student,
@@ -109,7 +110,6 @@ def search_student_page():
         # search by name
         name = data["keyword"]
         students=[]
-        
         return render_template("index.html", students=students, selected_student="")
 
 
@@ -153,11 +153,12 @@ def get_all_student_reviews_action(student_id):
     reviews = get_all_student_reviews(student_id)
     return jsonify(reviews), 200
 
-# Lists all reviews for a given student.
+
+# Page - Lists all reviews for a given student.
 @student_views.route("/students/<int:student_id>/reviews", methods=["GET"])
 @login_required
 def get_all_student_reviews_page(student_id):
-    reviews = get_all_student_reviews(student_id)
     all_students = get_all_students()
     student = get_student(student_id)
-    return render_template("index.html", students=all_students, selected_student=student)
+    users=get_all_users()
+    return render_template("index.html", students=all_students, selected_student=student, users=users)

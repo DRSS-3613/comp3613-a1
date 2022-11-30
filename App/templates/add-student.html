@@ -6,31 +6,26 @@
 
 {% block content %}
     <h1>Add Student</h1>
-    
-<main class="auth">
-   
     <form class="add-student-form text-center" action="/students" method="POST">
-        <div class="input-container">
+    <div class="input-container">
+    
+        {% if not data%}
+        {% set data = "" %}
+        {%endif%}
+        <label for="firstName" class="auth-label"> First Name </label>
+        <input type="text" class="auth-input" name="firstName" value="{{ data.firstName }}" required>
         
-            {% if not data%}
-            {% set data = "" %}
-            {%endif%}
-            <label for="firstName" class="auth-label"> First Name </label>
-            <input type="text" class="auth-input" name="firstName" value="{{ data.firstName }}" required>
-            
-            <label for="lastName" class="auth-label"> Last Name </label>
-            <input type="text" class="auth-input" name="lastName" value="{{ data.lastName }}" required>
-            
-            <label for="faculty" class="auth-label"> Faculty </label>
-            <input type="text" class="auth-input" name="faculty" value="{{ data.faculty }}" required>
-            
-            <label for="programme" class="auth-label"> Programme </label>
-            <input type="text" class="auth-input" name="programme" value="{{ data.programme }}" required>
-            
-        </div>
-        <input type="submit" value="Add Student" id="add_student-btn" class="submit-btn btn red btn-large">
- 
-</main>
+        <label for="lastName" class="auth-label"> Last Name </label>
+        <input type="text" class="auth-input" name="lastName" value="{{ data.lastName }}" required>
+        
+        <label for="faculty" class="auth-label"> Faculty </label>
+        <input type="text" class="auth-input" name="faculty" value="{{ data.faculty }}" required>
+        
+        <label for="programme" class="auth-label"> Programme </label>
+        <input type="text" class="auth-input" name="programme" value="{{ data.programme }}" required>
+        
+    </div>
+    <input type="submit" value="Add Student" id="add_student-btn" class="submit-btn btn red btn-large">
 {% endblock %}
 {{ super() }}
     

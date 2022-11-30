@@ -7,131 +7,130 @@
 {% block content %}
 
 {% if current_user.is_admin %}
-<main class="main-container">
-        <!-- View Users Section -->
-        <div class="search" style="max-width:40vw; padding-right:5vw; padding-top:20px;">
-          <form class="search-form text-center" action="/sts" method="POST">
-          <input type="text" class="search-input" name="user_id" placeholder="Enter id" value="{{users.id}}">
-            <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
-                SEARCH <i class="material-icons left"> search </i>
-            </button>
-            <button type="button" class="red add-student-btn waves-effect waves-light btn btn-small">
-                ADD STUDENT <i class="material-icons left"> add_circle </i>
-            </button>
-            </form>
-        </div>
-        <section class="card-container">
-            {%for user in users%}
-            <div class="card user-card">
-              <div class="card-content">
-                <h5 style="margin-bottom: 20px;">{{user.firstName}} {{user.lastName}}</h5>
-                {%if user==current_user%}
-                  <h6 class="red-text"> (YOU) </h6>
-                {%endif%}
-                  <p> ID: {{user.id}}</p>
-                  <p> Email: {{user.email}}</p>
-                  <p> Access:
-                    {%if user.access==2%}
-                      Admin
-                    {%else%}
-                      Staff
-                      {%endif%}
-                  </p>
-                  <p style="margin-top:10px;">
-                  </p>
-                <div class="btn-wrapper">
-                  <a class="waves-effect red accent-5 waves-dark btn" id="delete-btn" href="/users/{{user.id}}" method="DELETE">
-                    <i class="material-icons left"> delete </i> Delete </a>
-                </div>
-              </div>
+    <!-- View Users Section -->
+    <div class="search" style="max-width:40vw; padding-right:5vw; padding-top:20px;">
+      <form class="search-form text-center" action="/sts" method="POST">
+      <input type="text" class="search-input" name="user_id" placeholder="Enter id" value="{{users.id}}">
+        <button type="submit" class="red search-btn waves-effect waves-light btn btn-small">
+            SEARCH <i class="material-icons left"> search </i>
+        </button>
+        <button type="button" class="red add-student-btn waves-effect waves-light btn btn-small">
+            ADD STUDENT <i class="material-icons left"> add_circle </i>
+        </button>
+        </form>
+    </div>
+    <section class="card-container">
+        {%for user in users%}
+        <div class="card user-card">
+          <div class="card-content">
+            <h5 style="margin-bottom: 20px;">{{user.firstName}} {{user.lastName}}</h5>
+            {%if user==current_user%}
+              <h6 class="red-text"> (YOU) </h6>
+            {%endif%}
+              <p> ID: {{user.id}}</p>
+              <p> Email: {{user.email}}</p>
+              <p> Access:
+                {%if user.access==2%}
+                  Admin
+                {%else%}
+                  Staff
+                  {%endif%}
+              </p>
+              <p style="margin-top:10px;">
+              </p>
+            <div class="btn-wrapper">
+              <a class="waves-effect red accent-5 waves-dark btn" id="delete-btn" href="/users/{{user.id}}" method="DELETE">
+                <i class="material-icons left"> delete </i> Delete </a>
             </div>
-            {%endfor%}
-        </section>
+          </div>
         </div>
-        <!-- /End of View Users-->
+        {%endfor%}
+    </section>
+    </div>
+    <!-- /End of View Users-->
       
   <!--CSS -->
 <style>
-    html{
-      height:100vh;
+  html{
+    height:100vh;
+  }
+  .flash{
+    -moz-animation: delay 0s ease-in 3s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 3s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 3s forwards;
+  }
+  @keyframes delay {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
     }
-    .flash{
-      -moz-animation: delay 0s ease-in 3s forwards;
-      /* Firefox */
-      -webkit-animation: cssAnimation 0s ease-in 3s forwards;
-      /* Safari and Chrome */
-      -o-animation: cssAnimation 0s ease-in 3s forwards;
+  }
+  @-webkit-keyframes delay {
+    to {
+        width:0;
+        height:0;
+        visibility:hidden;
     }
-    @keyframes delay {
-      to {
-          width:0;
-          height:0;
-          overflow:hidden;
-      }
-    }
-    @-webkit-keyframes delay {
-      to {
-          width:0;
-          height:0;
-          visibility:hidden;
-      }
-    }
-    .main-container {
-      display:flex;
-      height: 100vh;
-      width:75vw;
-    }
-    
-    .card-container {
-      overflow-y: visible;
-      display: flex;
-      justify-content: space-evenly;
-      flex-wrap: wrap;
-      height: inherit;
-      width:100%;
-      
-    }
-    .card{
-      margin: 0px 0px 10%x 0px;
-    }
+  }
+  .main-container {
+    display:flex;
+    height: 100vh;
+    width:75vw;
+  }
   
-    .user-card {
-      width: 200px;
-      max-height: 50vh;
-      max-width: 100%;
-    }
+  .card-container {
+    overflow-y: visible;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    height: inherit;
+    width:100%;
     
-    .btn {
-      margin-top: 22px;
-      border-radius: 20px;
-    }
-    .btn-wrapper{
-      display: flex;
-      justify-content: flex-start;
-      left: 10%;
-      bottom: 10%;
-    }
+  }
+  .card{
+    margin: 0px 0px 10%x 0px;
+  }
 
-    input[type=text] {
-      border: 1px solid grey !important;
-      box-shadow: 0 1px 0 0 red!important;
-      padding:2px 8px!important;
-    }
+  .user-card {
+    width: 200px;
+    max-height: 50vh;
+    max-width: 100%;
+  }
   
-    input[type=submit] {
-      color:white;
-    }
-  
-    .align-right{
-      display: flex;
-      justify-content: flex-end;
-    }
-    .delete{
-      margin-left: 5px;
-      margin-top:-10px;
-      margin-bottom:10px;
-    }
-    </style>
+  .btn {
+    margin-top: 22px;
+    border-radius: 20px;
+  }
+  .btn-wrapper{
+    display: flex;
+    justify-content: flex-start;
+    left: 10%;
+    bottom: 10%;
+  }
+
+  input[type=text] {
+    border: 1px solid grey !important;
+    box-shadow: 0 1px 0 0 red!important;
+    padding:2px 8px!important;
+  }
+
+  input[type=submit] {
+    color:white;
+  }
+
+  .align-right{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .delete{
+    margin-left: 5px;
+    margin-top:-10px;
+    margin-bottom:10px;
+  }
+  </style>
   <!-- /End CSS -->
 
 </main>

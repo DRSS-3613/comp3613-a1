@@ -5,42 +5,110 @@
 {{ super() }}
 
 {% block content %}
-<main class="main-container">
-        <!--   View Students Section -->
-        <div class="area-1">
-            <div class="search" style="max-width:40vw; padding-top:20px;">
-              <form class="search-form text-center" action="/dashboard" method="POST">
-              <input type="text" class="search-input" name="keyword" placeholder="Enter student name or id">
-                <button type="submit" style="margin:10px 0 10px 0" class="red search-btn waves-effect waves-dark btn btn-small">
-                    SEARCH <i class="material-icons left"> search </i>
-                </button>
-              </form>
-            </div>
-            <section class="card-container" >
-                {%for student in students%}
-                <div class="card student-card">
-                    <div class="card-content">
-                        <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
-                        <p> Student ID: {{student.id}}</p>
-                        <p> Faculty: {{student.faculty}}</p>
-                        <p> Programme: {{student.programme}}</p>
-                        <h5 style="margin-top:10px;">
-                            <p> {{student.get_karma()}}</p>
-                        </h5>
-                      <div class="btn-wrapper">
-                        <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="/students/{{student.id}}">
-                            <i class="material-icons left"> library_add </i> Review </a>
-                      </div>
-                    </div>
-                </div>
-                {%endfor%}
-            </section>
+<main class="main-container container">
+    <!--   View Students Section -->
+    <div class="area-1">
+        <div class="search" style="width:40vw; padding:20px 0 0 20px;">
+          <form class="search-form text-center" action="/dashboard" method="POST">
+          <input type="text" class="search-input" name="keyword" placeholder="Enter student name or id">
+            <button type="submit" style="margin:10px 0 10px 0" class="red search-btn waves-effect waves-dark btn btn-small">
+                SEARCH <i class="material-icons left"> search </i>
+            </button>
+          </form>
         </div>
-        <!-- /End of View Students-->
+        <section class="card-container" >
+            {%for student in students%}
+            <div class="card student-card">
+                <div class="card-content">
+                    <h5 style="margin-bottom: 20px;">{{student.firstName}} {{student.lastName}}</h5>
+                    <p> Student ID: {{student.id}}</p>
+                    <p> Faculty: {{student.faculty}}</p>
+                    <p> Programme: {{student.programme}}</p>
+                    <h5 style="margin-top:10px;">
+                        <p> {{student.get_karma()}}</p>
+                    </h5>
+                  <div class="btn-wrapper">
+                    <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="/students/{{student.id}}/reviews">
+                        <i class="material-icons left"> library_add </i> Review </a>
+                  </div>
+                </div>
+            </div>
+            {%endfor%}
+        </section>
+    </div>
+    <!-- /End of View Students-->
+
+    <!--   Review Section -->
+    <div class="area-2">
+    <section class="review-container">
+      <h4>
+      {% if selected_student %}
+          {{selected_student["firstName"]}} {{selected_student["lastName"]}}
+      {% else %}
+      Select a Student
+      {% endif %}
+    </h4>
+      <form>
+      <div>
+          <h5> Write a Review </h5>
+          <div>
+          <input type="text" name="review-text" rows="3" required/>
+          </div>
+          {% if selected_user %}
+              <input type="submit" class="right waves-effect red lighten-2 waves-light btn" id="create-review" value="Create Review" formmethod="post" formaction="{{url_for('write_review', s=selected_student.id)}}">
+          {% else %}
+              <a class="right waves-effect red lighten-1 waves-darken btn" id="create-review">Create Review </a>
+          {% endif %}
+          </div>
+      </form>
       
+    </section>
+     
+
+    <!-- Reviews List area -->
+    {% if selected_student %}
+    <section class="reviews-list">
+      {% if not selected_student.reviews: %}
+          <h6> No reviews recorded for this student </h6>
+        </section>
+      {% else %}
+        {% for review in selected_student.reviews: %}
+          <div class="card review-card">
+            <div class="card-content">
+              <h5> {{review.text}} </h5> 
+                {%for user in users%}
+                  {%if user.id == review.staff_id %}
+                    {%set temp = true%}
+                    <p> <em> Written by {{user.firstName}}{{user.lastName}} on {{review.timestamp}} </em></p> 
+                  {%endif%}
+                  {%endfor%} 
+                  {%if temp != true %}
+                    <p> <em> Written by deleted user on {{review.timestamp}} </em></p> 
+                    {%endif%} 
+              <span style="padding-right: 20px;">
+              <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="/student/{{selected_student.id}}/reviews">
+                {{review.get_num_upvotes()}}
+                <i class="vote material-icons">thumb_up</i>
+              </a>
+              <a class="waves-effect red darken-2 waves-dark btn" id="downvote-review" href="/student/{{selected_student.id}}/reviews">
+                {{review.get_num_downvotes()}}
+                <i class="vote material-icons">thumb_down</i>
+              </a>
+              </span>
+            </div>
+          </div>
+        {% endfor %}
+        </section>
+        {% endif %}
+      {% endif %}
+    <!-- /Reviews List -->
+    </div>
+  </div>
+      <!-- End of Area 2   -->
+        
        
   <!--CSS -->
-<style>
+  <style>
     html{
       height:100vh;
     }
@@ -48,7 +116,7 @@
     .main-container {
       display:flex;
       height: 100vh;
-      width:55vw;
+      width:inherit;
     }
     
     .area-1 {
@@ -87,8 +155,9 @@
     }
     .area-2 {
       padding: 0px 2%;
-      max-width:25%;
+      width:35%;
     }
+    
     .review-container{
       margin-bottom: 20%;
     }
@@ -126,11 +195,8 @@
       margin-top:-10px;
       margin-bottom:10px;
     }
-    </style>
+  </style>
   <!-- /End CSS -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-      <script> M.AutoInit(); </script>
-
-    </main>
+</main>
 {% endblock %}
 {{ super() }}

@@ -7,8 +7,6 @@
 {% block content %}
     <h1>Login</h1>
     
-<main class="auth">
-   
     <form class="auth-form text-center" action="/login" method="POST">
         <div class="input-container">
         
@@ -28,6 +26,5 @@
             New user?  <a href="/signup" class="invisible">  Sign up </a>
         </div>
     </span>
-</main>
 {% endblock %}
 {{ super() }}
