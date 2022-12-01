@@ -87,11 +87,13 @@
                   {%endfor%} 
                   
                 <span style="padding-right: 20px;">
-                <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="/student/{{selected_student.id}}/reviews">
+                  {%set vote_type="up"%}
+                <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
                   {{review.get_num_upvotes()}}
                   <i class="vote material-icons">thumb_up</i>
                 </a>
-                <a class="waves-effect red darken-2 waves-dark btn" id="downvote-review" href="/student/{{selected_student.id}}/reviews">
+                {%set vote_type="down"%}
+                <a class="waves-effect red darken-2 waves-dark btn" id="downvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
                   {{review.get_num_downvotes()}}
                   <i class="vote material-icons">thumb_down</i>
                 </a>

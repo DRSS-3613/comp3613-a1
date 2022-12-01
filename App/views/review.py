@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from flask_jwt import jwt_required, current_identity
 from flask_login import login_required, current_user
 
@@ -9,6 +9,9 @@ from App.controllers import (
     vote_review,
     update_review,
     delete_review,
+    get_all_students,
+    get_student,
+    get_all_users
 )
 
 review_views = Blueprint("review_views", __name__, template_folder="../templates")
@@ -35,9 +38,8 @@ def create_review_page(student_id):
     review = create_review(
         staff_id=current_user.id, student_id=student_id, sentiment = data["sentiment"], text=data["text"]
     )
-    if review:
-        return jsonify(review.to_json()), 201
-    return jsonify({"error": "review not created"}), 400
+    return render_template("index.html", students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
+    
 
 
 # List all reviews
@@ -67,6 +69,15 @@ def vote_review_action(review_id, vote_type):
         review = vote_review(review_id, current_identity.id, vote_type)
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
+
+# Upvotes/Downvotes post given post id and user id
+@review_views.route("/reviews/<int:review_id>/<vote_type>", methods=["GET"])
+@login_required
+def vote_review_page(review_id, vote_type):
+    review = get_review(review_id)
+    if review:
+        review = vote_review(review_id, current_user.id, vote_type)
+    return render_template("index.html", students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
 
 
 # Updates post given post id and new text
