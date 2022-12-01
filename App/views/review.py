@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt import jwt_required, current_identity
+from flask_login import login_required, current_user
 
 from App.controllers import (
     create_review,
@@ -20,6 +21,19 @@ def create_review_action():
     data = request.json
     review = create_review(
         staff_id=data["staff_id"], student_id=data["student_id"], sentiment = data["sentiment"], text=data["text"]
+    )
+    if review:
+        return jsonify(review.to_json()), 201
+    return jsonify({"error": "review not created"}), 400
+
+
+# Create review given user id, student id and text
+@review_views.route("/reviews/<student_id>", methods=["POST"])
+@login_required
+def create_review_page(student_id):
+    data = request.form
+    review = create_review(
+        staff_id=current_user.id, student_id=student_id, sentiment = data["sentiment"], text=data["text"]
     )
     if review:
         return jsonify(review.to_json()), 201

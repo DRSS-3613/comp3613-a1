@@ -18,7 +18,7 @@ class Review(db.Model):
     def __init__(self, staff_id, student_id, sentiment, text):
         self.staff_id = staff_id
         self.student_id = student_id
-        self.timestamp = datetime.datetime.now()
+        self.timestamp = datetime.datetime.now().replace(microsecond=0)
         self.sentiment = sentiment
         self.text = text
     
