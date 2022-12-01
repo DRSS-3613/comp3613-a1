@@ -88,8 +88,8 @@ def update_review_action(review_id):
     data = request.json
     review = get_review(review_id)
     if review:
-        if current_identity.id == review.user_id or current_identity.is_admin():
-            update_review(review_id, text=data["text"])
+        if current_identity.id == review.staff_id or current_identity.is_admin():
+            update_review(review_id, data["sentiment"], text=data["text"])
             return jsonify({"message": "post updated successfully"}), 200
         else:
             return jsonify({"error": "Access denied"}), 403

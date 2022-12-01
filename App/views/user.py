@@ -63,7 +63,7 @@ def signup_page():
             flash("email taken")
         else:
             user = create_user(
-                email=data["email"], password=data["password"], firstName=data["firstName"], lastName=data["lastName"], access=1
+                email=data["email"], password=data["password"], firstName=data["firstName"], lastName=data["lastName"], access=data["access"]
             )   
             if user:
                 flash("user " + data["email"] + " created")
@@ -167,9 +167,8 @@ def delete_user_page(user_id):
         user = get_user(user_id)
         if user:
             delete_user(user_id)
-            users=get_all_users()
-            return render_template("admin-users.html", users=users, selected_user=user)
-    return jsonify({"message": "User not found"}), 404
+            return render_template("admin-users.html", users=get_all_users(), selected_user=user)
+    return render_template("admin-users.html", users=get_all_users(), selected_user=None)
 
 
 # Get user by access level route
