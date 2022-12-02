@@ -7,12 +7,17 @@
 {% block content %}
     <!--   View Students Section -->
     <div class="area-1">
-        <div class="search" style="width:40vw; padding-top:5vh; margin-left:10%;">
+        <div class="search" style="width:40vw; padding-left:2%; margin-top:5%;">
             <form class="search-form text-center" action="/dashboard" method="POST">
             <input type="text" class="search-input" name="keyword" placeholder="Enter student name or id">
               <button type="submit" style="margin:5px 0 10px 0" class="red search-btn waves-effect waves-dark btn btn-small">
                   SEARCH <i class="material-icons left"> search </i>
               </button>
+              {% if current_user.is_admin() %}
+                <a style="margin:5px 0 10px 0" href="{{url_for('student_views.create_student_page')}}" class="red search-btn waves-effect waves-light btn btn-small">
+                  Add Student <i class="material-icons left"> add_circle </i>
+                </a>
+              {%endif%}
             </form>
           </div>
         <section class="card-container" >
@@ -28,7 +33,12 @@
                     </h5>
                   <div class="btn-wrapper">
                     <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="/students/{{student.id}}/reviews">
-                        <i class="material-icons left"> library_add </i> Review </a>
+                        <i class="material-icons left"> library_add </i>
+                        Review
+                      </a>
+                      <a class="waves-effect red waves-dark btn" id="edit-btn" href="{{url_for('student_views.update_student_page', student_id=student.id, edited_student=student)}}">
+                        <i class="material-icons left"> edit </i>
+                      </a>
                   </div>
                 </div>
             </div>
@@ -105,6 +115,33 @@
           {% endif %}
         {% endif %}
       <!-- /Reviews List -->
+
+      {%if not edited_student%}
+        {% set edited_student = None%}
+      {%endif%}
+      
+      {% if edited_student %}
+      <section class="edit-student">
+        <form>
+          <div class="input-container">
+            <label for="firstName" class="auth-label"> First Name </label>
+            <input type="text" class="auth-input" name="firstName" value="{{ edited_student.firstName }}" required>
+            
+            <label for="lastName" class="auth-label"> Last Name </label>
+            <input type="text" class="auth-input" name="lastName" value="{{ edited_student.lastName }}" required>
+            
+            <label for="faculty" class="auth-label"> Faculty </label>
+            <input type="text" class="auth-input" name="faculty" value="{{ edited_student.faculty }}" required>
+            
+            <label for="programme" class="auth-label"> Programme </label>
+            <input type="text" class="auth-input" name="programme" value="{{ edited_student.programme }}" required>
+            
+            <input type="submit" class="right waves-effect red darken-2 waves-dark btn" id="edit-btn" value="Update" formmethod="post" formaction="{{url_for('student_views.update_student_page', student_id=edited_student.id)}}">
+          </div>
+        </form>
+      </section>
+      {%endif%}
+
       </div>
   </div>
       <!-- End of Area 2   -->

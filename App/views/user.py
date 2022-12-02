@@ -85,8 +85,8 @@ def login():
         if not user:
             flash("Invalid Credentials!")
         else:
-            login_user(user, remember=True)
             current_identity=user
+            login_user(current_identity, remember=True)
             flash("user login successful")
             return redirect(url_for('student_views.dashboard_page'))
     return render_template("/auth/login.html", data=data)
@@ -103,16 +103,13 @@ def get_users_action():
     return jsonify({"message": "Access denied"}), 403
 
 
-
 # Manage staff page
 # Admin view all staff
 @user_views.route("/users", methods=["GET"])
 @login_required
 def get_users_page():
-    users=None
     if current_user.is_admin():
-        users = get_all_users()
-        return render_template("admin-users.html", users=users, selected_user="")
+        return render_template("admin-users.html", users=get_all_users(), selected_user="")
     return redirect(url_for("#"))
 
 

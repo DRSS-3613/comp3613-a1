@@ -33,11 +33,9 @@ def create_student_action():
 
 # Add student page
 # Must be an admin to access this route
-@student_views.route("/students", methods=["POST", "GET"])
+@student_views.route("/students/new", methods=["POST", "GET"])
 @login_required
 def create_student_page():
-    student=None
-    data=None
     if request.method== "POST":
         if current_user.is_admin():
             data = request.form
@@ -48,9 +46,7 @@ def create_student_page():
                 flash("student created successfully")
             else:
                 flash("student not created")
-        return render_template("add-student.html", student=student, data=data)
-    if request.method=="GET":
-        return render_template("add-student.html", student=student, data=data)
+    return render_template("add-student.html", student=None, data=None)
 
 # Updates student given student id, name, programme and faculty
 # Must be an admin to access this route
@@ -72,6 +68,29 @@ def update_student_action(student_id):
     return jsonify({"error": "unauthorized"}), 401
 
 
+# Update student page
+# Must be an admin to access this route
+@student_views.route("/students/<int:student_id>", methods=["POST", "GET"])
+@login_required
+def update_student_page(student_id):
+    if current_user.is_admin():
+        if request.method == "POST":
+            data = request.form
+            student = update_student(
+                student_id,
+                firstName=data["firstName"],
+                lastName=data["lastName"],
+                programme=data["programme"],
+                faculty=data["faculty"],
+            )
+            if student:
+                flash("student updated")
+            else:
+                flash("student not updated")
+        if request.method == "GET":
+            return render_template("index.html", students=get_all_students(), edited_student=get_student(student_id))
+    return render_template("index.html", students=get_all_students(), edited_student=get_student(student_id))
+
 # Lists all students
 @student_views.route("/api/students", methods=["GET"])
 @jwt_required()
@@ -86,8 +105,16 @@ def get_all_students_action():
 @student_views.route("/dashboard", methods=["GET"])
 @login_required
 def dashboard_page():
-    all_students = get_all_students()
-    return render_template("index.html", students=all_students,selected_student="")
+    return render_template("index.html", students=get_all_students(), selected_student="")
+
+# Manage student page
+# Must be an admin to access this route
+@student_views.route("/students", methods=["GET"])
+@login_required
+def manage_students_page():
+    if current_user.is_admin():
+        return render_template("admin-students.html", students=get_all_students(), selected_student="")
+    return redirect(url_for("#"))
 
 
 # View student and reviews page --> search

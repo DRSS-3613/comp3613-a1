@@ -49,14 +49,10 @@ def get_all_student_reviews(id):
 def update_student(id, firstName=None, lastName=None, programme=None, faculty=None):
     student = Student.query.get(id)
     if student:
-        if firstName:
-            student.firstName = firstName
-        if lastName:
-            student.firstName = lastName
-        if programme:
-            student.programme = programme
-        if faculty:
-            student.faculty = faculty
+        student.firstName = firstName
+        student.lastName = lastName
+        student.programme = programme
+        student.faculty = faculty
         db.session.add(student)
         db.session.commit()
         return student
