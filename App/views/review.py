@@ -70,6 +70,7 @@ def vote_review_action(review_id, vote_type):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
+
 # Upvotes/Downvotes post given post id and user id PAGE
 @review_views.route("/reviews/<int:review_id>/<vote_type>", methods=["GET"])
 @login_required
@@ -98,7 +99,7 @@ def update_review_action(review_id):
 
 # Updates post given post id and new text PAGE
 # Only admins or the original reviewer can edit a review
-@review_views.route("/review/<int:review_id>", methods=["POST", "GET"])
+@review_views.route("/review/<int:review_id>/edit", methods=["POST", "GET"])
 @login_required
 def update_review_page(review_id):
     review = get_review(review_id)

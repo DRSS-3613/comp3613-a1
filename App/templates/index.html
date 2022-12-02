@@ -29,7 +29,16 @@
                     <p> Faculty: {{student.faculty}}</p>
                     <p> Programme: {{student.programme}}</p>
                     <h5 style="margin-top:10px;">
-                        <p> {{student.get_karma()}}</p>
+                      {%if student.get_karma()>=60 %}
+                        <p style="color:green;">
+                          {%endif%}
+                      {%if student.get_karma()<60 and student.get_karma()>=40 %}
+                        <p style="color:orange;">
+                          {%endif%}
+                        {%if student.get_karma()<45 %}
+                        <p style="color:red;">
+                          {%endif%}
+                          {{student.get_karma()}}</p>
                     </h5>
                   <div class="btn-wrapper">
                     <a class="waves-effect red accent-5 waves-dark btn" id="review-btn" href="/students/{{student.id}}/reviews">
@@ -106,7 +115,7 @@
                     {%endif%}
                   {%endfor%} 
                   
-                <span style="padding-right: 20px;">
+                <span style="padding-right:0px;">
                   {%set vote_type="up"%}
                 <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
                   {{review.get_num_upvotes()}}
@@ -197,7 +206,7 @@
     }
   
     .student-card {
-      width: 240px;
+      width: 250px;
       max-height: 40%;
       max-width: 100%;
     }
@@ -211,7 +220,7 @@
     .btn-wrapper{
       display: flex;
       justify-content: flex-start;
-      left: 10%;
+      left: 8%;
       bottom: 10%;
     }
     .area-2 {
