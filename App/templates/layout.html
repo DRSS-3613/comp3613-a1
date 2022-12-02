@@ -19,11 +19,13 @@
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left">
                 <li><a href="#">Profile</a></li>
+                {%if current_user.access==1%}
                 <li><a href="/dashboard">Search</a></li>
-                  {%if current_user.access==2%}
+                {%else%}
+                <li><a href="/dashboard">Manage Students</a></li>
+                {%endif%}
                   <li><a href="/users">Manage Staff</a></li>
-                  <li><a href="/students">Manage Students</a></li>
-                  {%endif%}
+                  <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
       </div>

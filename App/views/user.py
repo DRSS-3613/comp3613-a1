@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request, send_from_directory, flash
 from flask_jwt import jwt_required, current_identity
-from flask_login import login_user, login_required, LoginManager, current_user
+from flask_login import login_user, login_required, LoginManager, current_user, logout_user
 
 from App.controllers import (
     create_user,
@@ -91,6 +91,13 @@ def login():
             return redirect(url_for('student_views.dashboard_page'))
     return render_template("/auth/login.html", data=data)
 
+# Logout
+@user_views.route('/logout', methods=['GET'])
+@login_required
+def logout():
+  logout_user()
+  flash('Logged Out!')
+  return redirect(url_for('index_views.index_page')) 
 
 # Get all users route
 # Must be an admin to access this route
