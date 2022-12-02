@@ -59,8 +59,13 @@
         {% if selected_student %}
             {{selected_student["firstName"]}} {{selected_student["lastName"]}}
         {% else %}
+          {%if edited_student%}
+            {{edited_student["firstName"]}} {{edited_student["lastName"]}}
+          {%else%}
             Select a Student
+          {% endif %}
         {% endif %}
+        
       </h4>
         <form>
           {% if selected_student %}
