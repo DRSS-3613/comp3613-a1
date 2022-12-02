@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, request, render_template, flash
 from flask_jwt import jwt_required, current_identity
 from flask_login import login_required, current_user
 
@@ -70,7 +70,7 @@ def vote_review_action(review_id, vote_type):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
-# Upvotes/Downvotes post given post id and user id
+# Upvotes/Downvotes post given post id and user id PAGE
 @review_views.route("/reviews/<int:review_id>/<vote_type>", methods=["GET"])
 @login_required
 def vote_review_page(review_id, vote_type):
@@ -96,6 +96,23 @@ def update_review_action(review_id):
     return jsonify({"error": "review not found"}), 404
 
 
+# Updates post given post id and new text PAGE
+# Only admins or the original reviewer can edit a review
+@review_views.route("/review/<int:review_id>", methods=["POST", "GET"])
+@login_required
+def update_review_page(review_id):
+    review = get_review(review_id)
+    selected_student= get_student(review.student_id)
+    if review:
+        if request.method == "POST":
+            data = request.form
+            if current_user.id == review.staff_id or current_user.is_admin():
+                update_review(review_id, data["sentiment"], text=data["text"])
+                flash("post updated successfully")
+                return render_template("index.html", selected_student=selected_student, students=get_all_students(), reviews=get_all_reviews(), users=get_all_users())
+    return render_template("update-review.html", review=review)
+
+
 # Deletes post given post id
 # Only admins or the original reviewer can delete a review
 @review_views.route("/api/reviews/<int:review_id>", methods=["DELETE"])
@@ -109,6 +126,19 @@ def delete_review_action(review_id):
         else:
             return jsonify({"error": "Access denied"}), 403
     return jsonify({"error": "review not found"}), 404
+
+
+# Deletes post given post id
+# Only admins or the original reviewer can delete a review PAGE
+@review_views.route("/review/<int:review_id>", methods=["GET"])
+@login_required
+def delete_review_page(review_id):
+    review = get_review(review_id)
+    if review:
+        if current_user.id == review.staff_id or current_user.is_admin():
+            delete_review(review_id)
+            flash("post deleted successfully")
+    return render_template("index.html", students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews())
 
 
 # Gets all votes for a given review

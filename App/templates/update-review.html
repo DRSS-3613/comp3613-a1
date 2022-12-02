@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}CARD{% endblock %}
+{% block page %}Update Review{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<form>
+    {% if review %}
+      <h5> Edit Review </h5>
+      <div style="margin-top:8vh;">
+      <input type="text" name="text" rows="3" value="{{review.text}}" required/>
+      </div>
+          <div>
+            {%if review.sentiment=="positive"%}
+                <label style="margin-right:3%;">
+                    <input name="sentiment" type="radio" value="positive" checked />
+                    <span>Positive</span>
+                </label>
+                <label>
+                    <input name="sentiment" type="radio" value="negative" />
+                    <span>Negative</span>
+                </label>
+            {%endif%}
+            {%if review.sentiment=="negative"%}
+                <label style="margin-right:3%;">
+                    <input name="sentiment" type="radio" value="positive" />
+                    <span>Positive</span>
+                </label>
+                <label>
+                    <input name="sentiment" type="radio" value="negative" checked />
+                    <span>Negative</span>
+                </label>
+            {%endif%}
+          </div>
+          <input type="submit" class="right waves-effect red darken-2 waves-dark btn" id="edit-review" value="Update Review" formmethod="post" formaction="{{url_for('review_views.update_review_page', review_id=review.id)}}">
+      {% endif %}
+</form>
+{% endblock %}
+{{ super() }}

@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
-{% block title %}CARD | Add Student{% endblock %}
-{% block page %}CARD{% endblock %}
+{% block title %} Add Student{% endblock %}
+{% block page %}Add Student{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>Add Student</h1>
-    <form class="add-student-form text-center" action="/students/new" method="POST">
+    <h4>Add Student</h4>
+    <form style="margin-top:8vh;" class="add-student-form text-center" action="/students/new" method="POST">
     <div class="input-container">
     
         {% if not data%}

@@ -1,6 +1,6 @@
 from App.models import Review, Student, User, Vote
 from App.database import db
-
+import datetime
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise
@@ -25,6 +25,7 @@ def update_review(id, sentiment, text):
     if review:
         review.text = text
         review.sentiment = sentiment
+        review.timestamp = datetime.datetime.now().replace(microsecond=0)
         db.session.add(review)
         db.session.commit()
         return review

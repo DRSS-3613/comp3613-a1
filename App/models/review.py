@@ -3,7 +3,6 @@ from App.database import db
 import datetime
 from sqlalchemy import DateTime
 from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy.ext.mutable import MutableDict
 
 
 class Review(db.Model):
