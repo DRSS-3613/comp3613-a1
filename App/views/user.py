@@ -97,7 +97,7 @@ def login():
 def logout():
   logout_user()
   flash('Logged Out!')
-  return redirect(url_for('index_views.index_page')) 
+  return redirect(url_for('user_views.login')) 
 
 # Get all users route
 # Must be an admin to access this route

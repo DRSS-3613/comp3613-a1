@@ -70,7 +70,7 @@ def update_student_action(student_id):
 
 # Update student page
 # Must be an admin to access this route
-@student_views.route("/students/<int:student_id>", methods=["POST", "GET"])
+@student_views.route("/dashboard/<int:student_id>", methods=["POST", "GET"])
 @login_required
 def update_student_page(student_id):
     if current_user.is_admin():
@@ -87,8 +87,6 @@ def update_student_page(student_id):
                 flash("student updated")
             else:
                 flash("student not updated")
-        if request.method == "GET":
-            return render_template("index.html", students=get_all_students(), edited_student=get_student(student_id))
     return render_template("index.html", students=get_all_students(), edited_student=get_student(student_id))
 
 # Lists all students
@@ -106,15 +104,6 @@ def get_all_students_action():
 @login_required
 def dashboard_page():
     return render_template("index.html", students=get_all_students(), selected_student="")
-
-# Manage student page
-# Must be an admin to access this route
-@student_views.route("/students", methods=["GET"])
-@login_required
-def manage_students_page():
-    if current_user.is_admin():
-        return render_template("admin-students.html", students=get_all_students(), selected_student="")
-    return redirect(url_for("#"))
 
 
 # View student and reviews page --> search
@@ -171,6 +160,21 @@ def delete_student_action(student_id):
             return jsonify({"message": "student deleted"}), 200
         return jsonify({"error": "student not deleted"}), 400
     return jsonify({"error": "unauthorized"}), 401
+
+
+# Deletes a student given student id page
+# Must be an admin to access this route
+@student_views.route("/students/<int:student_id>", methods=["GET"])
+@login_required
+def delete_student_page(student_id):
+    if current_user.is_admin():
+        outcome = delete_student(student_id)
+        if outcome:
+            flash("student deleted")
+        else:
+            flash("student not deleted")
+    return render_template("index.html", students=get_all_students())
+
 
 
 # Lists all reviews for a given student.

@@ -36,9 +36,14 @@
                         <i class="material-icons left"> library_add </i>
                         Review
                       </a>
-                      <a class="waves-effect red waves-dark btn" id="edit-btn" href="{{url_for('student_views.update_student_page', student_id=student.id, edited_student=student)}}">
+                      {%if current_user.is_admin()%}
+                      <a class="waves-effect red waves-dark btn" id="edit-btn" href="{{url_for('student_views.update_student_page', student_id=student.id)}}">
                         <i class="material-icons left"> edit </i>
                       </a>
+                      <a class="waves-effect red waves-dark btn" id="delete-btn" href="{{url_for('student_views.delete_student_page', student_id=student.id)}}">
+                        <i class="material-icons left"> delete </i>
+                      </a>
+                      {%endif%}
                   </div>
                 </div>
             </div>
@@ -187,7 +192,9 @@
     .btn {
       margin-top: 10px;
       border-radius: 20px;
+      margin:5px;
     }
+
     .btn-wrapper{
       display: flex;
       justify-content: flex-start;
@@ -227,10 +234,12 @@
       border: 1px solid;
       box-shadow: 0 1px 0 0 purple!important;
     }
+    
     .align-right{
       display: flex;
       justify-content: flex-end;
     }
+
     .delete{
       margin-left: 5px;
       margin-top:-10px;
