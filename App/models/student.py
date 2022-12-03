@@ -19,7 +19,6 @@ class Student(db.Model):
     def get_karma(self):
         total_positivity = 0
         total_votes=0
-        num_reviews=0
         for review in self.reviews:
             if review.sentiment=="positive":
                 total_positivity += review.get_num_upvotes()
