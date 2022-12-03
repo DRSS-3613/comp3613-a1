@@ -12,7 +12,6 @@ from App.controllers import (
     get_all_students,
     get_student,
     get_all_users,
-    get_all_votes
 )
 
 review_views = Blueprint("review_views", __name__, template_folder="../templates")
@@ -157,4 +156,4 @@ def get_review_votes_action(review_id):
 @review_views.route("/reviews/<int:review_id>/votes", methods=["GET"])
 @login_required
 def votes_log_page(review_id):
-    return render_template("votes-log.html", review=get_review(review_id), users=get_all_users(), votes=get_all_votes(review_id))
+    return render_template("votes-log.html", review=get_review(review_id), users=get_all_users())
