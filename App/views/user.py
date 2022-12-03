@@ -171,6 +171,7 @@ def delete_user_page(user_id):
         user = get_user(user_id)
         if user:
             delete_user(user_id)
+            flash("User deleted")
             return render_template("admin-users.html", users=get_all_users(), selected_user=user)
     return render_template("admin-users.html", users=get_all_users(), selected_user=None)
 

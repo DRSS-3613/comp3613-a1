@@ -30,7 +30,7 @@ def create_review_action():
     return jsonify({"error": "review not created"}), 400
 
 
-# Create review given user id, student id and text
+# Create review given user id, student id and text PAGE
 @review_views.route("/reviews/<student_id>", methods=["POST"])
 @login_required
 def create_review_page(student_id):
@@ -38,6 +38,8 @@ def create_review_page(student_id):
     review = create_review(
         staff_id=current_user.id, student_id=student_id, sentiment = data["sentiment"], text=data["text"]
     )
+    if review:
+        flash("review created")
     return render_template("index.html", students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
     
 
@@ -78,7 +80,7 @@ def vote_review_page(review_id, vote_type):
     review = get_review(review_id)
     if review:
         review = vote_review(review_id, current_user.id, vote_type)
-    return render_template("index.html", students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
+    return render_template("index.html", disabled_btn=vote_type, students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
 
 
 # Updates post given post id and new text

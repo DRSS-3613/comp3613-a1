@@ -117,15 +117,15 @@
                   
                 <span style="padding-right:0px;">
                   {%set vote_type="up"%}
-                <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
-                  {{review.get_num_upvotes()}}
-                  <i class="vote material-icons">thumb_up</i>
-                </a>
-                {%set vote_type="down"%}
-                <a class="waves-effect red darken-2 waves-dark btn" id="downvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
-                  {{review.get_num_downvotes()}}
-                  <i class="vote material-icons">thumb_down</i>
-                </a>
+                    <a class="waves-effect red darken-2 waves-dark btn" id="upvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
+                      {{review.get_num_upvotes()}}
+                      <i class="vote material-icons">thumb_up</i>
+                    </a>
+                    {%set vote_type="down"%}
+                    <a class="waves-effect red darken-2 waves-dark btn" id="downvote-review" href="{{url_for('review_views.vote_review_page', review_id=review.id, vote_type=vote_type)}}">
+                      {{review.get_num_downvotes()}}
+                      <i class="vote material-icons">thumb_down</i>
+                    </a>
                 </span>
                 {% if current_user.is_admin() or (current_user.id == review.staff_id) %}
                   <a style="margin-left:0px;" class="waves-effect red waves-dark btn" id="edit-r-btn" href="{{url_for('review_views.update_review_page', review_id=review.id)}}">
@@ -269,5 +269,6 @@
     }
   </style>
   <!-- /End CSS -->
+
 {% endblock %}
 {{ super() }}
