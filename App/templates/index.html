@@ -106,6 +106,7 @@
           </section>
         {% else %}
           {% for review in selected_student.reviews: %}
+          <a class="black-text" href="{{url_for('review_views.votes_log_page', review_id=review.id)}}">
             <div class="card review-card">
               <div class="card-content">
                 <h5> {{review.text}} </h5> 
@@ -113,6 +114,7 @@
                     {%if user.id == review.staff_id %}
                       <p> <em> Written by {{user.firstName}} {{user.lastName}} on {{review.timestamp}} </em></p> 
                     {%endif%}
+              
                   {%endfor%} 
                   
                 <span style="padding-right:0px;">
@@ -134,6 +136,7 @@
                   <a style="margin-left:0px;" class="waves-effect red waves-dark btn" id="delete-r-btn" href="{{url_for('review_views.delete_review_page', review_id=review.id)}}">
                     <i class="material-icons left"> delete </i>
                   </a>
+                </a>
                 {%endif%}
               </div>
             </div>

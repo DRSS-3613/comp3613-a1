@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}Votes History{% endblock %}
+{% block page %}Votes History{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<div>
+    {% if not review.votes: %}
+        <h6> No votes recorded for this review </h6>
+    {% else %}
+        <h5> {{review.text}} </h5>
+        {% for user in users %}
+            {%if user.id == review.staff_id %}
+                <p> <em> Written by {{user.firstName}} {{user.lastName}} on {{review.timestamp}} </em></p> 
+            {%endif%}
+        {%endfor %}
+        <section class="card-container" >
+            {% for vote in review.votes %}
+                <div class="card vote-card">
+                    <div class="card-content">
+                        {%for user in users%}
+                            {%if user.id == vote.staff_id %}
+                                <h6 style="margin-bottom: 10px;">{{user.firstName}} {{user.lastName}}
+                                    {%if vote.type =="up" %}
+                                        upvoted this review <i style="padding-left:30px;" class="vote material-icons">thumb_up</i>
+                                    {%else%}
+                                        {%if vote.type =="down" %}
+                                            downvoted this review <i style="padding-left:20px;" class="vote material-icons">thumb_down</i>
+                                        {%endif%}
+                                    {%endif%}
+                                </h6>
+                            {%endif%}
+                        {%endfor%}
+                    </div>
+                </div>
+            {%endfor%}
+        </section>
+    {%endif%}
+</div>
+{% endblock %}
+{{ super() }}

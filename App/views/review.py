@@ -11,7 +11,8 @@ from App.controllers import (
     delete_review,
     get_all_students,
     get_student,
-    get_all_users
+    get_all_users,
+    get_all_votes
 )
 
 review_views = Blueprint("review_views", __name__, template_folder="../templates")
@@ -80,8 +81,7 @@ def vote_review_page(review_id, vote_type):
     review = get_review(review_id)
     if review:
         review = vote_review(review_id, current_user.id, vote_type)
-    return render_template("index.html", disabled_btn=vote_type, students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
-
+    return render_template("index.html", students=get_all_students(), selected_student=get_student(review.student_id), reviews=get_all_reviews(), users=get_all_users())
 
 # Updates post given post id and new text
 # Only admins or the original reviewer can edit a review
@@ -152,3 +152,9 @@ def get_review_votes_action(review_id):
     if review:
         return jsonify(review.get_all_votes_json()), 200
     return jsonify({"error": "review not found"}), 404
+
+# Gets all votes for a given review PAGE
+@review_views.route("/reviews/<int:review_id>/votes", methods=["GET"])
+@login_required
+def votes_log_page(review_id):
+    return render_template("votes-log.html", review=get_review(review_id), users=get_all_users(), votes=get_all_votes(review_id))
